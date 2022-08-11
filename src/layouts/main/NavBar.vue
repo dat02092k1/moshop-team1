@@ -2,7 +2,7 @@
   <div>
     <div>
       <a-layout>
-        <a-layout-header class="bg-[#069255] flex text-white px-5">
+        <a-layout-header class="bg-[#069255] flex text-white px-5 h-[66px]">
           <div>
             <a
               class="h-full items-center text-[31px] text-white mr-3 font-bold"
@@ -17,19 +17,19 @@
                 <div
                   class="line w-[2px] h-[35px] bg-white text-white mt-3 mb-3 mr-3"
                 ></div>
-                <a class="font-bold text-[17px] text-white mr-3" href=""
-                  >hncp7@gmail.com</a
-                >
-                <button class="text-white">
-                  <i class="fa-solid fa-angle-down"></i>
-                </button>
+                <!-- <a class="font-bold text-[17px] text-white mr-3" href=""
+                  >hncp7@gmail.com</a> -->
+                <DropDown/>
+                 
               </li>
+
               <li class="ml-5">
                 <a href="" class="text-[20px] text-white">
                   <i class="fa-solid fa-chart-simple font-bold text-[20px]"></i
                   >Báo Cáo</a
                 >
               </li>
+
               <li class="ml-5">
                 <a href="" class="text-[20px] text-white">
                   <i class="fa-regular fa-user-group font-bold text-[20px]"></i>
@@ -86,3 +86,7 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import DropDown from './navbar/DropDown.vue';
+</script>
