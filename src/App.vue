@@ -1,16 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import {ref} from 'vue';
-// import {EmployeeStore} from './stores/ListEmployee.js';
-import HomeView from "./views/HomeView.vue";
-// const listEmployee = EmployeeStore();
+import ViewEmployeeInfo from "./views/ViewEmployeeInfo.vue";
+
 </script>
 
 <template>
-  <div>
-    <!-- <ViewEmployeeInfo /> -->
-    <HomeView />
-  </div>
+<ViewEmployeeInfo />
+  
+
+  <RouterView />
 </template>
 
 <style scoped>
