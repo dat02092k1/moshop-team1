@@ -15,9 +15,9 @@
     </a-modal>
   </div>
 </template>
-<script>
+<script setup>
 import { PlusOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -29,47 +29,37 @@ function getBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
+const previewVisible = ref(false);
+const previewImage = ref("");
+const fileList = ref([]);
 
-export default defineComponent({
-  components: {
-    PlusOutlined,
-  },
+const handleCancel = () => {
+  previewVisible.value = false;
+};
 
-  setup() {
-    const previewVisible = ref(false);
-    const previewImage = ref("");
-    const fileList = ref([]);
+const handlePreview = async (file) => {
+  if (!file.url && !file.preview) {
+    file.preview = await getBase64(file.originFileObj);
+  }
 
-    const handleCancel = () => {
-      previewVisible.value = false;
-    };
+  previewImage.value = file.url || file.preview;
+  previewVisible.value = true;
+};
 
-    const handlePreview = async (file) => {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
+const handleChange = ({ fileList: newFileList }) => {
+  fileList.value = newFileList;
+};
 
-      previewImage.value = file.url || file.preview;
-      previewVisible.value = true;
-    };
-
-    const handleChange = ({ fileList: newFileList }) => {
-      fileList.value = newFileList;
-    };
-
-    return {
-      previewVisible,
-      previewImage,
-      fileList,
-      handleCancel,
-      handlePreview,
-      handleChange,
-    };
-  },
-});
+defineExpose(
+  previewVisible,
+  previewImage,
+  fileList,
+  handleCancel,
+  handlePreview,
+  handleChange
+);
 </script>
 <style scoped>
-/* you can make up upload button and sample style by using stylesheets */
 :deep(.ant-upload-select-picture-card i) {
   font-size: 32px;
   color: #069255;

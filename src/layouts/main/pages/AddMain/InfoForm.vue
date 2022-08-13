@@ -1,24 +1,20 @@
 <template>
   <a-form
     ref="formRef"
-    :layout="formLayout"
     :model="formState"
     :rules="rules"
     class="grid md:grid-cols-4 gap-x-5 flex"
   >
     <div class="col-span-2">
       <a-form-item ref="name" label="Tên nhân viên" name="name">
-        <a-input v-model:value="formState.name" />
+        <a-input :value="formState.name" />
       </a-form-item>
       <a-form-item ref="phone" label="SĐT" name="phone">
-        <a-input v-model:value="formState.phone" />
+        <a-input :value="formState.phone" />
       </a-form-item>
       <a-form-item ref="formState.birthday" label="Ngày sinh" name="birthday">
         <!--      <a-datepicker v-model:value="formState.birthday" />-->
-        <a-date-picker
-          v-model:value="formState.birthday"
-          placeholder="Chọn ngày"
-        />
+        <a-date-picker :value="formState.birthday" placeholder="Chọn ngày" />
       </a-form-item>
     </div>
     <div class="col-span-2">

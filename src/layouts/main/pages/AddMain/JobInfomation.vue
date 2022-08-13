@@ -9,9 +9,8 @@
       label="Ngày bắt đầu làm việc"
       name="jobTimeStart"
     >
-      <!--      <a-datepicker v-model:value="formState.birthday" />-->
       <a-date-picker
-        v-model:value="formJobInfomationState.jobTimeStart"
+        :value="formJobInfomationState.jobTimeStart"
         placeholder="Chọn ngày"
       />
     </a-form-item>
@@ -21,12 +20,7 @@
       label="Nơi làm việc"
     >
       <a-space>
-        <a-select
-          v-model:value="value1"
-          style="width: 440px"
-          :size="size"
-          :options="options"
-        ></a-select>
+        <a-select style="width: 100%"></a-select>
       </a-space>
     </a-form-item>
     <a-form-item>
@@ -51,9 +45,25 @@
     </a-form-item>
     <a-form-item class="jobInfo-checkbox-group">
       <div class="jobInfo-item-title">Màn hình được sử dụng</div>
-      <a-checkbox v-model:checked="checked" class="jobInfo-checkbox-item"
+      <a-checkbox
+        :checked="checked"
+        class="jobInfo-checkbox-item"
+        @click="clickCheckbox"
         >Chats chốt đơn</a-checkbox
       >
+      <ul v-show="checked" class="list-checkbox">
+        <li v-for="(page, index) in getPages" :key="index">
+          <a-checkbox>
+            <img
+              :src="page.avatar"
+              class="rounded-full w-6 h-6 mr-3"
+              alt=""
+              srcset=""
+            />
+            {{ page.name }}
+          </a-checkbox>
+        </li>
+      </ul>
       <br />
       <a-checkbox class="jobInfo-checkbox-item">Chats vận hành</a-checkbox>
       <br />
@@ -78,16 +88,42 @@
       >
     </a-form-item>
   </a-form>
-  <!--  <button @click="resetForm" style="background-color: #069255; color: white">Reset</button>-->
 </template>
 <script setup>
-import { ref } from "vue";
-const formJobInfo = ref();
-const checked = ref(false);
+import { ref, watchEffect } from "vue";
+import axios from "axios";
+import TOKEN from "../../../../service/AllApi";
+let formJobInfo = ref();
+let checked = ref(false);
+const getPages = ref({});
+
 const formJobInfomationState = ref({
   jobTimeStart: "",
   addressJob: "",
 });
+const clickCheckbox = () => {
+  checked.value = !checked.value;
+  return checked.value;
+};
+const API = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
+
+watchEffect(async () => {
+  if (checked.value) {
+    try {
+      const res = await axios.get(API, {
+        headers: {
+          Authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      });
+      getPages.value = res.data.data.pages;
+      // console.log("sdsd", JSON.stringify(getPages.value));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+// console.log(getPages);
 
 const rulesJobInfo = {
   jobTimeStart: [
@@ -98,72 +134,22 @@ const rulesJobInfo = {
     },
   ],
 };
-const popupScroll = () => {
-  console.log("popupScroll");
-};
+
 defineExpose(
   formJobInfo,
   formJobInfomationState,
   rulesJobInfo,
   checked,
-  popupScroll
-  //     size: ref("default"),
-  //     value1: ref("a1"),
-  //     options: [...Array(25)].map((_, i) => ({
-  //   value: (i + 10).toString(36) + (i + 1),
-  // })),
+  clickCheckbox,
+  getPages
 );
 </script>
 <style scoped>
-:deep(.ant-form-item-required):before {
-  display: none !important;
+@import "css/JobInfomation.css";
+.list-checkbox li {
+  margin-left: 15px !important;
 }
-:deep(.ant-form-item-required):after {
-  content: "";
-  /*color: red;*/
-}
-:deep(.ant-form-item-label > label) {
-  width: 200px !important;
-  /*width:200px ;*/
-}
-:deep(.ant-picker) {
-  width: 100%;
-}
-.btn-add-time-job {
-  /*background-color: #069255;*/
-  color: #069255;
-  padding: 8px 22px;
-  border: 1px solid #069255;
-  border-radius: 4px;
-}
-.btn-add-time-job:hover {
-  background-color: #069255;
-  color: #fff;
-}
-.jobInfo-item-title {
-  font-weight: 500;
-  margin-bottom: 25px;
-}
-.jobInfo-checkbox-item {
-  margin-bottom: 10px;
-}
-:deep(.ant-checkbox-wrapper:hover .ant-checkbox-inner, .ant-checkbox:hover
-    .ant-checkbox-inner, .ant-checkbox-input:focus + .ant-checkbox-inner) {
-  border-color: #069255;
-  border-radius: 5px;
-}
-:deep(.ant-checkbox-checked .ant-checkbox-inner) {
-  background-color: #069255;
-  border-color: #069255;
-}
-:deep(.ant-checkbox-checked::after) {
-  border-color: #069255;
-  border-radius: 5px;
-}
-:deep(.ant-checkbox-inner) {
-  width: 21px;
-  height: 21px;
-  border-radius: 5px;
-  border-color: #069255;
+:deep(.ant-checkbox + span) {
+  /*display: flex;*/
 }
 </style>

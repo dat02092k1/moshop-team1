@@ -1,30 +1,28 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import axios from "axios";
+import { ref } from "vue";
+// import axios from "axios";
 import UploadImage from "./AddMain/UploadImage.vue";
 import InfoForm from "./AddMain/InfoForm.vue";
 import ProfileStaff from "./AddMain/ProfileStaff.vue";
 import JobInfomation from "./AddMain/JobInfomation.vue";
-import TOKEN from "../../../service/AllApi.js";
+// import TOKEN from "../../../service/AllApi.js";
 const visible = ref(false);
-// const addUser = ref([]);
 const showModal = () => {
   visible.value = true;
 };
-const API = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
-// let PassOk =;
-onMounted(async () => {
-  try {
-    const res = await axios.get(`${API}`, {
-      headers: {
-        Authorization: "Bearer " + TOKEN,
-      },
-    });
-    console.log(res.data);
-  } catch (error) {
-    console.log(error);
-  }
-});
+// const API = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
+// onMounted(async () => {
+//   try {
+//     const res = await axios.get(API, {
+//       headers: {
+//         Authorization: "Bearer " + TOKEN.TOKEN,
+//       },
+//     });
+//     console.log(res.data);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 </script>
 <template>
   <div class="grid grid-cols-1">
@@ -47,12 +45,7 @@ onMounted(async () => {
       </div>
       <div class="head-action">
         <button class="btn-head-action" @click="showModal()">Lưu</button>
-        <a-modal
-          v-model:visible="visible"
-          title="Xác nhận đăng ký"
-          :confirm-loading="confirmLoading"
-          @ok="handleOk"
-        >
+        <a-modal :visible="visible" title="Xác nhận đăng ký">
           <span>
             <p>
               Mã OTP vừa được gửi đến số điện thoại quý khách đã đăng ký! Vui
@@ -69,7 +62,6 @@ onMounted(async () => {
               hoặc mail về cskh@ghtk.vn để được hỗ trọ nhanh nhất!
             </p>
           </span>
-          <!-- <p>{{ modalText }}</p> -->
         </a-modal>
       </div>
     </div>

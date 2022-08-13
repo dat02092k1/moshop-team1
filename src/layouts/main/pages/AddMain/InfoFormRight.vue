@@ -1,16 +1,16 @@
 <template>
   <a-form-item ref="password" label="Mật khẩu" name="password">
     <a-input-password
-        v-model:value="formState.password"
-        placeholder="Mật khẩu phải có ít nhất 6 kí tự"
+      :value="formState.password"
+      placeholder="Mật khẩu phải có ít nhất 6 kí tự"
     />
   </a-form-item>
   <a-form-item ref="address" label="Địa chỉ" name="address">
-    <a-input v-model:value="formState.address" allow-clear />
+    <a-input :value="formState.address" allow-clear />
   </a-form-item>
 </template>
 <script setup>
-import { ref, toRaw } from "vue";
+import { ref } from "vue";
 const formRef = ref();
 
 const formState = ref({
