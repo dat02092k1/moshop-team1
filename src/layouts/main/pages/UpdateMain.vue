@@ -1,41 +1,58 @@
 <script setup>
-import { ref } from "vue";
-import UploadImage from "./AddMain/UploadImage.vue";
-import InfoForm from "./AddMain/InfoForm.vue";
+import { onMounted, ref } from "vue";
+import axios from "axios";
+import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
+import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
 import ProfileStaff from "./AddMain/ProfileStaff.vue";
 import JobInfomation from "./AddMain/JobInfomation.vue";
+import TOKEN from "../../../service/AllApi.js";
 const visible = ref(false);
+const dataInfoUserUpdate = ref([]);
 const showModal = () => {
   visible.value = true;
 };
+
+const idUserUpdate = "157836bb-95d7-49a6-b221-3c339615fa50";
+// const API_GET_USER = `https://x.ghtk.vn/api/v2/staff/detail?shop_user_id=157836bb-95d7-49a6-b221-3c339615fa50`;
+onMounted(async () => {
+  try {
+    const res = await axios.get(
+      `https://x.ghtk.vn/api/v2/staff/detail?shop_user_id=${idUserUpdate}`,
+      {
+        headers: {
+          Authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      }
+    );
+    dataInfoUserUpdate.value = res.data.data;
+    // console.log(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
 <template>
   <div class="grid grid-cols-1">
     <div class="head flex justify-between">
       <div class="head-back">
         <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="3"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="3"
         >
           <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 19l-7-7 7-7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
           />
         </svg>
       </div>
       <div class="head-action">
         <button class="btn-head-action" @click="showModal()">Lưu</button>
-        <a-modal
-            v-model:visible="visible"
-            title="Xác nhận đăng ký"
-            :confirm-loading="confirmLoading"
-            @ok="handleOk"
-        >
+        <a-modal :visible="visible" title="Xác nhận đăng ký">
           <span>
             <p>
               Mã OTP vừa được gửi đến số điện thoại quý khách đã đăng ký! Vui
@@ -52,7 +69,6 @@ const showModal = () => {
               hoặc mail về cskh@ghtk.vn để được hỗ trọ nhanh nhất!
             </p>
           </span>
-          <!-- <p>{{ modalText }}</p> -->
         </a-modal>
       </div>
     </div>
@@ -75,7 +91,7 @@ const showModal = () => {
       <div class="page_jobInfomation col-span-6">
         <fieldset class="bunker__info">
           <legend class="bunker-title">Thông tin công việc</legend>
-          <JobInfomation />
+          <JobInfomation :dataInfoUserUpdate="dataInfoUserUpdate" />
         </fieldset>
       </div>
       <div class="page_profileStaff col-span-6">
@@ -104,7 +120,7 @@ const showModal = () => {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .head-back svg {
   color: #069255;
 }

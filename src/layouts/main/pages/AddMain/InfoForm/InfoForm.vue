@@ -7,27 +7,36 @@
   >
     <div class="col-span-2">
       <a-form-item ref="name" label="Tên nhân viên" name="name">
-        <a-input :value="formState.name" />
+        <a-input v-model:value="formState.name" />
       </a-form-item>
       <a-form-item ref="phone" label="SĐT" name="phone">
-        <a-input :value="formState.phone" />
+        <a-input v-model:value="formState.phone" />
       </a-form-item>
-      <a-form-item ref="formState.birthday" label="Ngày sinh" name="birthday">
-        <!--      <a-datepicker v-model:value="formState.birthday" />-->
-        <a-date-picker :value="formState.birthday" placeholder="Chọn ngày" />
+      <a-form-item ref="birthday" label="Ngày sinh" name="birthday">
+        <a-date-picker
+          v-model:value="formState.birthday"
+          placeholder="Chọn ngày"
+        />
       </a-form-item>
     </div>
     <div class="col-span-2">
-      <InfoFormRight />
+      <a-form-item ref="password" label="Mật khẩu" name="password">
+        <a-input-password
+          v-model:value="formState.password"
+          placeholder="Mật khẩu phải có ít nhất 6 kí tự"
+        />
+      </a-form-item>
+      <a-form-item ref="address" label="Địa chỉ" name="address">
+        <a-input v-model:value="formState.address" allow-clear />
+      </a-form-item>
     </div>
   </a-form>
-  <!--  <button @click="resetForm" style="background-color: #069255; color: white">Reset</button>-->
 </template>
 <script setup>
-import { ref, toRaw } from "vue";
-import InfoFormRight from "./InfoFormRight.vue";
+import { onBeforeUpdate, ref, toRaw } from "vue";
+import axios from "axios";
+import TOKEN from "../../../../../service/AllApi.js";
 const formRef = ref();
-
 const formState = ref({
   name: "",
   phone: "",
@@ -35,7 +44,6 @@ const formState = ref({
   password: "",
   address: "",
 });
-
 const rules = {
   name: [
     {
@@ -107,7 +115,7 @@ const onSubmit = () => {
   formRef.value
     .validate()
     .then(() => {
-      console.log("values", formState, toRaw(formState));
+      console.log(formState.value);
     })
     .catch((error) => {
       console.log("error", error);
@@ -117,7 +125,19 @@ const onSubmit = () => {
 const resetForm = () => {
   formRef.value.resetFields();
 };
-
+const API_ADD_USER = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
+onBeforeUpdate(async () => {
+  try {
+    const res = await axios.post(API_ADD_USER, {
+      headers: {
+        Authorization: "Bearer " + TOKEN.TOKEN,
+      },
+    });
+    console.log(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 defineExpose(formRef, formState, rules, onSubmit, resetForm);
 </script>
 <style scoped>

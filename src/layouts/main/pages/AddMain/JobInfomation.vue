@@ -1,47 +1,28 @@
 <template>
-  <a-form
-    ref="formJobInfo"
-    :model="formJobInfomationState"
-    :rules="rulesJobInfo"
-  >
-    <a-form-item
-      ref="formJobInfomationState.jobTimeStart"
-      label="Ngày bắt đầu làm việc"
-      name="jobTimeStart"
-    >
-      <a-date-picker
-        :value="formJobInfomationState.jobTimeStart"
-        placeholder="Chọn ngày"
-      />
+  <a-form :model="formJobInfomationState">
+    <a-form-item label="Ngày bắt đầu làm việc">
+      <a-date-picker placeholder="Chọn ngày" />
     </a-form-item>
-    <a-form-item
-      ref="formJobInfomationState.addressJob"
-      name="addressJob"
-      label="Nơi làm việc"
-    >
+    <!--    ref="formJobInfomationState.addressJob"-->
+    <a-form-item name="addressJob" label="Nơi làm việc">
+      <select style="width: 440px">
+        <option v-for="(value, index) in getListWorkPlace" :key="index">
+          {{ value.address }}
+        </option>
+      </select>
       <a-space>
-        <a-select style="width: 100%"></a-select>
+        <!--        <a-select-->
+        <!--          v-for="(value, index) in prop.getListWorkPlace"-->
+        <!--          :key="index"-->
+        <!--          style="width: 100%"-->
+        <!--        ></a-select>-->
       </a-space>
     </a-form-item>
     <a-form-item>
       <div class="jobInfo-item-title">Thời gian làm việc</div>
-      <button class="flex btn-add-time-job">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="3"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
-        </svg>
-        Thêm thời gian
-      </button>
+<!--{{log(ListWorkTime)}}-->
+      <AddWorkingTime v-for="(test, index) in ListWorkTime" :key="index" />
+      <ButtonAddWorkTime @emitTest="handleParentEmit" />
     </a-form-item>
     <a-form-item class="jobInfo-checkbox-group">
       <div class="jobInfo-item-title">Màn hình được sử dụng</div>
@@ -90,17 +71,19 @@
   </a-form>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import axios from "axios";
 import TOKEN from "../../../../service/AllApi";
-let formJobInfo = ref();
+import AddWorkingTime from "./WorkTime/AddWorkingTime.vue";
+import ButtonAddWorkTime from "./WorkTime/ButtonAddWorkTime.vue";
+let isShowAddWorkingTime = ref(false);
 let checked = ref(false);
 const getPages = ref({});
-
+const getListWorkPlace = ref([]);
 const formJobInfomationState = ref({
-  jobTimeStart: "",
   addressJob: "",
 });
+let ListWorkTime = ref([]);
 const clickCheckbox = () => {
   checked.value = !checked.value;
   return checked.value;
@@ -116,40 +99,37 @@ watchEffect(async () => {
         },
       });
       getPages.value = res.data.data.pages;
-      // console.log("sdsd", JSON.stringify(getPages.value));
     } catch (error) {
       console.log(error);
     }
   }
 });
+const api_getListPlace =
+  "https://x.ghtk.vn/api/fulfilment/v1/shops/get-pick-addresses";
+onMounted(async () => {
+  try {
+    const list = await axios.get(api_getListPlace, {
+      headers: {
+        Authorization: "Bearer " + TOKEN.TOKEN,
+      },
+    });
+    list.data.data.forEach((value) => {
+      getListWorkPlace.value.push(value);
+      // console.table(getListWorkPlace.value);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+function handleParentEmit(data) {
+  isShowAddWorkingTime = true;
+  ListWorkTime.value.push(data);
+}
 
-// console.log(getPages);
-
-const rulesJobInfo = {
-  jobTimeStart: [
-    {
-      required: true,
-      message: "Không được để trống ngày làm việc",
-      trigger: "blur",
-    },
-  ],
-};
-
-defineExpose(
-  formJobInfo,
-  formJobInfomationState,
-  rulesJobInfo,
-  checked,
-  clickCheckbox,
-  getPages
-);
+// function  log(mes) {
+//   console.log(mes)
+// }
 </script>
 <style scoped>
 @import "css/JobInfomation.css";
-.list-checkbox li {
-  margin-left: 15px !important;
-}
-:deep(.ant-checkbox + span) {
-  /*display: flex;*/
-}
 </style>
