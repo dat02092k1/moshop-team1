@@ -30,37 +30,12 @@
               v-model="password"
               placeholder="Nhập Mật Khẩu"
             />
-            <!--            <div>-->
-            <!--              <input-->
-            <!--                v-if="showPassword"-->
-            <!--                type="text"-->
-            <!--                class="input"-->
-            <!--                v-model="password"-->
-            <!--              />-->
-            <!--              <input v-else type="password" class="input" v-model="password" />-->
-            <!--            </div>-->
-            <!--            <div class="control is-expanded">-->
-            <!--              <input v-if="showPassword" type="text" class="input" v-model="password" />-->
-            <!--              <input v-else type="password" class="input" v-model="password">-->
-            <!--            </div>-->
-            <!--            <i class="fa-solid fa-eye"></i>-->
-
-            <!--            <button class="button" @click="toggleShow"><span class="icon is-small is-right">-->
-            <!--									<i class="fas"-->
-            <!--                     :class="{ 'fa-eye-slash': showPassword, 'fa-eye': !showPassword }"></i>-->
-            <!--								</span>-->
-            <!--            </button>-->
-            <!--            <input-->
-            <!--              type="password"-->
-            <!--              id="password-field"-->
-            <!--              placeholder="Nhập Mật Khẩu"-->
-            <!--              @click="toggleShow"-->
-            <!--            />-->
+            
           </div>
         </form>
       </div>
       <div class="section-footer">
-        <button @click="loginHandle()" class="btn-login">Đăng Nhập</button>
+        <button @click="loginHandle" class="btn-login">Đăng Nhập</button>
       </div>
       <div class="register-shop">
         Bạn chưa có tài khoản?
@@ -73,23 +48,34 @@
 import { ref, reactive } from "vue";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
-
+import {useLoginStore} from "../../stores/counter.js"
+import { useStaffStore } from "../../stores/store.js";
 const username = ref("hncp7@gmail.com");
 const password = ref("Reset0103");
 const router = useRouter();
+const loginFunc = useLoginStore();
+const loadStaff = useStaffStore();
+import { format, isToday } from "date-fns";
+const currentDate = new Date();
+const today = format(currentDate, "yyyy-MM-dd"); 
 
 async function loginHandle() {
-  const res = await axios.post("https://x.ghtk.vn/api/fulfilment/auth/login", {
-    username: this.username,
-    password: this.password,
-  });
-  if (res.status === 200) {
-    localStorage.setItem("acessToken", res.data.data.access_token);
-    console.log(res.data.data);
-    router.push("/staff/home");
-    // this.$router.go("/staff/home");
-  }
+  // const res = await axios.post("https://x.ghtk.vn/api/fulfilment/auth/login", {
+  //   username: this.username,
+  //   password: this.password,
+  // });
+  // if (res.status === 200) {
+  //   localStorage.setItem("acessToken", res.data.data.access_token);
+  //   console.log(res.data.data);
+  //   router.push("/staff/home");
+    
+  // }
+  console.log(username.value);   
+  loadStaff.getStaff(today, today)
+  loginFunc.getLogin(username.value, password.value)
+  // setInterval((() => {console.log(loginFunc.user.id);}), 5000)
 }
+
 // import {computed} from "vue";
 
 defineExpose({

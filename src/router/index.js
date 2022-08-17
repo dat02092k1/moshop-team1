@@ -35,7 +35,8 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       // component: () => import("../layouts/main/pages/AddMain.vue"),
-      component: Show3
+      // component: Show3
+      component: () => import("../layouts/main/pages/Show3.vue")
     },
     {
       path: "/login",

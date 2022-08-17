@@ -3,7 +3,7 @@
     <template slot="img-column" >
       <div>
         HEH
-        <img :src="avatar" >
+        <img src="https://cdn.trangcongnghe.vn/uploads/posts/2017-08/heart-shaped-boob-challenge-trao-luu-moi-noi-cua-cac-co-nang-nong-bong_1.jpg" >
       </div>
     </template>
   </a-table>

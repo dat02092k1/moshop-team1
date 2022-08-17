@@ -55,12 +55,12 @@
                 </a>
               </li>
 
-              <li class="ml-5 hover:bg-white focus:bg-white">
-                <a href="" class="text-[20px] text-white hover:text-green-500">
+              <li @click="isActive()" class="ml-5 bg-white  ">
+                <a href="" class="text-[20px] px-2 text-green-500">
                   <i
                     class="fa-regular fa-people-group font-bold text-[20px]"
                   ></i>
-                  Nhân Viên
+                  Nhân viên
                 </a>
               </li>
 
@@ -73,7 +73,7 @@
                 </a>
               </li>
 
-              <li class="ml-5 bg-[#da4838]">
+              <li class="ml-5 bg-[#da4838] px-2">
                 <a class="text-[20px] text-white">
                   <i class="fa-regular fa-circle-up"></i>
                   Đăng Đơn
@@ -89,4 +89,12 @@
 
 <script setup>
 import DropDown from './navbar/DropDown.vue';
+const active = false;
+function isActive() {
+  active = true;
+}
 </script>
+
+<style scoped>
+
+</style>

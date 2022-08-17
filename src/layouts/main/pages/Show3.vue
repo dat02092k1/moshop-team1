@@ -3,7 +3,7 @@
     <div class="foo"></div>
     <div class="layout">
       <div class="page__header grid grid-cols-1 md:grid-cols-2">
-        <div class="left__content">
+        <div class="left__content px-4">
           <div class="info">
             <h1 class="info__title">Quản lý nhân viên</h1>
             <div class="info__live">
@@ -11,14 +11,36 @@
                 <div class="live__icon--ringing"></div>
                 <div class="live__icon--circle"></div>
               </div>
-              <div class="live__title">Live ( Cập nhật 15:15 )</div>
+              <div class="live__title">
+                Live ( Cập nhật {{ staff_items.getDateTime() }})
+              </div>
             </div>
           </div>
           <div class="filter">
-            <button class="btn__filter">Hôm Nay</button>
-            <button class="btn__filter">Tuần Này</button>
-            <button class="btn__filter">Tháng Này</button>
-            <button class="btn__filter">Tuỳ Chọn</button>
+            <!-- <button class="btn__filter" :class="{ red: isRed }" @click="toggleRed">Hôm nay</button> -->
+            <button
+              @click="showToday()"
+              class="btn__filter"
+              :class="{ green: staff_items.isShow == 1 }"
+            >
+              Hôm nay
+            </button>
+            <button
+              @click="showWeek()"
+              class="btn__filter"
+              :class="{ green: staff_items.isShow == 2 }"
+            >
+              Tuần này
+            </button>
+            <button
+              @click="showMonth()"
+              class="btn__filter"
+              :class="{ green: staff_items.isShow == 3 }"
+            >
+              Tháng này
+            </button>
+
+            <PickDate @changeDrop="changeDrop" />
           </div>
         </div>
         <div class="right__content">
@@ -27,35 +49,44 @@
             title="Cài đặt KPIs nhân viên"
             @ok="handleOk"
           >
-            <h2>Phân công Nhân Viên Chat</h2>
-            <h3>NV Online</h3>
-            <a-radio-group v-model:value="valueRadio">
-              <a-radio class="radioStyle" :value="1"
-                >Nhận tất cả hội thoại</a-radio
-              >
-              <a-radio class="radioStyle" :value="2"
-                >Nhận phần hội thoại được chia đều</a-radio
-              >
-              <a-radio class="radioStyle" :value="3"
-                >Nhận phần hội thoại bấm xem trước tiên</a-radio
-              >
-              <a-radio class="radioStyle" :value="4"
-                >Nhận tất cả hội thoại</a-radio
-              >
-              <a-radio class="radioStyle" :value="5"
-                >Nhận phần hội thoại trả lời trước tiên</a-radio
-              >
-            </a-radio-group>
-            <h3>NV Offline</h3>
-            <a-radio-group>
-              <a-radio class="radioStyle"
-                >Tiếp tục hội thoại sau khi Offline</a-radio
-              >
-              <a-radio class="radioStyle"
-                >Chuyển hội thoại chưa trả lời cho NV Online</a-radio
-              >
-              <button></button>
-            </a-radio-group>
+            <div class="setting bg-[#d6d6d6] p-3">
+              <h2>Phân công Nhân Viên Chat</h2>
+            </div>
+            <div class="setting-onl p-3">
+              <h3>NV Online</h3>
+              <a-radio-group @change="change" v-model:value="OnKpi">
+                <a-radio :style="radioStyle" :value="KPImessage[0].value"
+                  >Nhận tất cả hội thoại</a-radio
+                >
+                <a-radio :style="radioStyle" :value="KPImessage[1].value"
+                  >Nhận phần hội thoại được chia đều</a-radio
+                >
+                <a-radio :style="radioStyle" :value="KPImessage[2].value"
+                  >Nhận phần hội thoại bấm xem trước tiên</a-radio
+                >
+                <a-radio :style="radioStyle" :value="KPImessage[3].value"
+                  >Nhận phần hội thoại trả lời trước tiên</a-radio
+                >
+                <a-radio :style="radioStyle" :value="KPImessage[4].value"
+                  >Nhận phần hội thoại chốt đơn trước tiên</a-radio
+                >
+              </a-radio-group>
+            </div>
+
+            <div class="setting-off p-3">
+              <h3>NV Offline {{ OffKpi }}</h3>
+              <a-radio-group v-if="OnKpi !== 'all'" v-model:value="OffKpi">
+                <a-radio :style="radioStyleOff" :value="KPImessage[5].value"
+                  >Tiếp tục hội thoại sau khi Offline</a-radio
+                >
+                <a-radio :style="radioStyleOff" :value="KPImessage[6].value"
+                  >Chuyển hội thoại chưa trả lời cho NV Online</a-radio
+                >
+              </a-radio-group>
+            </div>
+            <div class="mt-4">
+              <button @click="postKpi()" class="bg-[#069255] p-3">Lưu</button>
+            </div>
           </a-modal>
           <button class="btn-action" @click="showModalKpi">
             <svg
@@ -102,48 +133,381 @@
       </div>
     </div>
 
-    <!-- <div class="table-contain">
-      <table>
-        <thead>
-          <tr>
-            <th>Nhân viên</th>
-            <th>KH tương tác</th>
-            <th>KH đã gọi</th>
-            <th>ĐH đã chốt</th>
-            <th>Tỷ lệ chốt</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr  v-for="(staff_item) in staff_items.staff" :key="staff_item.id" >
-            <td class="mx-8">
-              <img :src="staff_item.avatar" alt="">
-            </td>
-            <td class="mx-8">{{ staff_item.shop_code }}</td>
-            <td class="mx-8">{{ staff_item.tel }}</td>
-            <td class="mx-8">{{ staff_item.screens[1] }}</td>
-            <td class="mx-8">{{ staff_item.work_result.customer }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
-
-    <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <div class="overflow-scroll h-[500px] relative shadow-md sm:rounded-lg m-4">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
             <th scope="col" class="py-3 px-6">Nhân viên</th>
-            <th scope="col" class="py-3 px-6">KH tương tác</th>
-            <th scope="col" class="py-3 px-6">KH có SĐT</th>
-            <th scope="col" class="py-3 px-6">KH đã gọi</th>
-            <th scope="col" class="py-3 px-6">ĐH đã chốt</th>
-            <th scope="col" class="py-3 px-6">Tỷ lệ chốt</th>
-            <th scope="col" class="py-3 px-6">ĐH thành công</th>
-            <th scope="col" class="py-3 px-6">ĐH hoàn</th>
-            <th scope="col" class="py-3 px-6">Doanh thu</th>
-            <th scope="col" class="py-3 px-6">Phí hoàn</th>
-            <th scope="col" class="py-3 px-6">TG phản hồi TB</th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">KH tương tác</div>
+              <div class="head-sort flex">
+                <div
+                  @click="sortColAsc('customer')"
+                  class="head-asc absolute top-1 right-4"
+                >
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  @click="sortColDes('customer')"
+                  class="head-desc absolute top-3 right-2"
+                >
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">KH có SĐT</div>
+              <div class="head-sort flex">
+                <div
+                  @click="sortColAsc('customer_has_phone')"
+                  class="head-asc absolute top-1 right-4"
+                >
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  @click="sortColDes('customer_has_phone')"
+                  class="head-desc absolute top-3 right-2"
+                >
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">KH đã gọi</div>
+              <div class="head-sort flex">
+                <div
+                  @click="sortColAsc('call_log')"
+                  class="head-asc absolute top-1 right-4"
+                >
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  @click="sortColDes('call_log')"
+                  class="head-desc absolute top-3 right-2"
+                >
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">ĐH đã chốt</div>
+              <div @click="sortColAsc('customer_deal')" class="head-sort flex">
+                <div class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('customer_deal')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">Tỷ lệ chốt</div>
+              <div class="head-sort flex">
+                <div @click="sortColAsc('rate_order')" class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('rate_order')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">ĐH thành công</div>
+              <div class="head-sort flex">
+                <div @click="sortColAsc('order_success')" class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('order_success')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">ĐH hoàn</div>
+              <div class="head-sort flex">
+                <div @click="sortColAsc('order_return')" class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('order_return')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">Doanh thu</div>
+              <div class="head-sort flex">
+                <div  @click="sortColAsc('revenue')" class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('revenue')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">Phí hoàn</div>
+              <div class="head-sort flex">
+                <div @click="sortColAsc('fee')" class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('fee')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="py-3 px-6 relative">
+              <div class="head-name">TG phản hồi TB</div>
+              <div class="head-sort flex">
+                <div  @click="sortColAsc('time_reply')" class="head-asc absolute top-1 right-4">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84358 0L0.850586 5.55556H4.59533V15.2778H7.09183V5.55556H10.8366L5.84358 0Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+                <div @click="sortColDes('time_reply')" class="head-desc absolute top-3 right-2">
+                  <svg
+                    data-v-4a39057f=""
+                    width="11"
+                    height="16"
+                    viewBox="0 0 11 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      data-v-4a39057f=""
+                      d="M5.84343 15.2773L10.8364 9.72179H7.09168L7.09168 -0.000434875H4.59518L4.59518 9.72179H0.850438L5.84343 15.2773Z"
+                      fill="#BDBDBD"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -157,15 +521,16 @@
             </td>
             <!-- <td><img :src="staff_item.avatar"  class="w-[64px] h-[64px rounded-[50%]" alt="" /></td> -->
             <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
-            <td>{{ staff_item.work_result.customer }}</td>
+
+            <td>{{ staff_item.work_result.customer_has_phone }}</td>
+            <td>{{ staff_item.work_result.call_log }}</td>
+            <td>{{ staff_item.work_result.customer_deal }}</td>
+            <td>{{ staff_item.work_result.rate_order }}%</td>
+            <td>{{ staff_item.work_result.order_success }}</td>
+            <td>{{ staff_item.work_result.order_return }}</td>
+            <td>{{ staff_item.work_result.revenue }} đ</td>
+            <td>{{ staff_item.work_result.fee }} đ</td>
+            <td>{{ staff_item.work_result.time_reply }}s</td>
           </tr>
         </tbody>
       </table>
@@ -174,27 +539,204 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useStaffStore } from "../../../stores/store.js";
 import TableStaff from "./TableStaff.vue";
 import StaffOnly from "./StaffOnly.vue";
+import PickDate from "./PickDate.vue";
+import SelectDate from "./SelectDate.vue";
+import axios from "axios";
+import { useWeekTable } from "../../../stores/counter";
+import {
+  format,
+  addDays,
+  isToday,
+  startOfWeek,
+  startOfMonth,
+  endOfMonth,
+  formatRelative,
+  endOfWeek,
+} from "date-fns";
+
+const clicked = ref(false);
+const value = ref();
+const radioStyle = reactive({
+  display: "block",
+  height: "30px",
+  lineHeight: "30px",
+});
+
+const value2 = ref(1);
+const radioStyleOff = reactive({
+  display: "block",
+  height: "30px",
+  lineHeight: "30px",
+});
+
 // Modal!!!
 const visible = ref(false);
-const showModalKpi = () => {
-  visible.value = true;
+const display = ref(false);
+const changeDrop = () => {};
+
+const KPImessage = reactive([
+  {
+    value: "all",
+    name: "Nhận tất cả hội thoại",
+  },
+  {
+    value: "share_work",
+    name: "Nhận phần hội thoại được chia đều",
+  },
+  {
+    value: "first_view",
+    name: "Nhận phần hội thoại bấm xem trước tiên",
+  },
+  {
+    value: "first_reply",
+    name: "Nhận phần hội thoại trả lời trước tiên",
+  },
+  {
+    value: "first_deal",
+    name: "Nhận phần hội thoại chốt đơn trước tiên",
+  },
+  {
+    value: "keep",
+    name: "Tiếp tục hội thoại sau khi Offline",
+  },
+  {
+    value: "share",
+    name: "Chuyển hội thoại chưa trả lời cho NV Online",
+  },
+]);
+
+const change = () => {
+  console.log("heh");
+  console.log(value.value);
 };
+
+async function postKpi() {
+  await axios
+    .post(
+      "https://x.ghtk.vn/api/v2/staff/update-online-message-type",
+      {
+        message_type: OnKpi.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IiJ9.eyJ0b2tlbiI6IjNkZDU5ZWE5MDgyYWQ5ODYyYWVmYTczYTE0OTE2ZDJlN2JmN2YxYjdhZWRiMmNlZGQxMThkZDg5YzQ3ODg3MmQiLCJleHBpcmVkX2F0IjoiMjAyMS0wOC0xOVQwNTozNzozOC41MTA0MzBaIiwibW9fdGVsIjoiODQzNTYyNjIxMjEiLCJtb19yb2xlIjoiYWRtaW4iLCJtb191c2VybmFtZSI6ImhuY3A3QGdtYWlsLmNvbSJ9.M7U2RSNivrc0wFDhmXiOJgvhj2oH6AGNVNGxJ1OxDvA`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+    });
+  await axios
+    .post(
+      "https://x.ghtk.vn/api/v2/staff/update-offline-message-type",
+      {
+        message_type: OffKpi.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IiJ9.eyJ0b2tlbiI6IjNkZDU5ZWE5MDgyYWQ5ODYyYWVmYTczYTE0OTE2ZDJlN2JmN2YxYjdhZWRiMmNlZGQxMThkZDg5YzQ3ODg3MmQiLCJleHBpcmVkX2F0IjoiMjAyMS0wOC0xOVQwNTozNzozOC41MTA0MzBaIiwibW9fdGVsIjoiODQzNTYyNjIxMjEiLCJtb19yb2xlIjoiYWRtaW4iLCJtb191c2VybmFtZSI6ImhuY3A3QGdtYWlsLmNvbSJ9.M7U2RSNivrc0wFDhmXiOJgvhj2oH6AGNVNGxJ1OxDvA`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+    });
+  visible.value = false;
+}
+// const selectType
+// axios.post(url, {
+//   message-type: selectYtype
+// })
+
+const OnKpi = ref("");
+const OffKpi = ref("");
+function showModalKpi() {
+  visible.value = true;
+  console.log("heh");
+  axios
+    .get("https://x.ghtk.vn/api/v2/staff/get-config-message-type", {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IiJ9.eyJ0b2tlbiI6IjNkZDU5ZWE5MDgyYWQ5ODYyYWVmYTczYTE0OTE2ZDJlN2JmN2YxYjdhZWRiMmNlZGQxMThkZDg5YzQ3ODg3MmQiLCJleHBpcmVkX2F0IjoiMjAyMS0wOC0xOVQwNTozNzozOC41MTA0MzBaIiwibW9fdGVsIjoiODQzNTYyNjIxMjEiLCJtb19yb2xlIjoiYWRtaW4iLCJtb191c2VybmFtZSI6ImhuY3A3QGdtYWlsLmNvbSJ9.M7U2RSNivrc0wFDhmXiOJgvhj2oH6AGNVNGxJ1OxDvA`,
+      },
+    })
+    .then((res) => {
+      OnKpi.value = res.data.data.message_type;
+      OffKpi.value = res.data.data.offline_message_type;
+    });
+}
 const handleOk = (e) => {
   console.log(e);
   visible.value = false;
 };
+
+function sortColAsc(wsa) {
+  console.log("heh");
+  const arr = staff_items.staff.sort(
+    (a, b) => a.work_result.wsa - b.work_result.wsa
+  );
+  console.log(arr);
+}
+
+function sortColDes(wsd) {
+  const arr = staff_items.staff.sort(
+    (b, a) => b.work_result.wsd - a.work_result.wsd
+  );
+  console.log(arr);
+}
+
 const valueRadio = {};
 // Table data
+const date = new Date();
+const tmr = addDays(date, 1);
+const startWeek = startOfWeek(date);
+const endWeek = endOfWeek(date);
+const startMonth = startOfMonth(date);
+const endMonth = endOfMonth(date);
+const resultStartWeek = format(startWeek, "yyyy-MM-dd");
+const resultEndWeek = format(endWeek, "yyyy-MM-dd");
+const resultStartMonth = format(startMonth, "yyyy-MM-dd");
+const resultEndMonth = format(endMonth, "yyyy-MM-dd");
+const today = format(date, "yyyy-MM-dd");
 
+console.log(today);
+// const displayComponent = () => {
+//   display = true;
+//   console.log('heh');
+// }
 const staff_items = useStaffStore();
 
+const week_show = useWeekTable();
+
+var now = "";
+
+async function showToday() {
+  staff_items.isShow = 1;
+  staff_items.clearStaff();
+  await staff_items.getStaff(today, today);
+  console.log(today);
+}
+
+async function showWeek() {
+  staff_items.isShow = 2;
+  staff_items.clearStaff();
+  await staff_items.getStaff(resultStartWeek, resultEndWeek);
+  console.log(resultStartWeek);
+}
+
+async function showMonth() {
+  staff_items.isShow = 3;
+  staff_items.clearStaff();
+  await staff_items.getStaff(resultStartMonth, resultEndMonth);
+  console.log(resultStartMonth);
+}
+// const currentdate = new Date();
+console.log(staff_items.getDateTime());
 onMounted(async () => {
-  await staff_items.getStaff();
-  // console.log(staff_items.staff[0].avatar);
+  await staff_items.getStaff(today, today);
 });
 
 defineExpose({
@@ -210,6 +752,13 @@ defineExpose({
   justify-content: space-between;
   /*padding: 0px 0px 20px 0px;*/
   padding-bottom: 20px;
+}
+
+.text-xs tr th {
+  border: 1px solid #dee2e6;
+}
+.text-center td {
+  border: 1px solid #dee2e6;
 }
 .info {
   display: flex;
@@ -279,6 +828,11 @@ defineExpose({
   background-color: #069255;
   color: #ffffff;
 }
+
+.green {
+  background-color: #069255;
+  color: white;
+}
 .btn-action {
   display: flex;
   width: 182px;
@@ -303,9 +857,9 @@ defineExpose({
 #components-table-demo-summary tfoot td {
   background: #fafafa;
 }
-.ant-modal-header {
+/* .ant-modal-header {
   background-color: #069255;
-}
+} */
 .radioStyle {
   display: block;
   height: 30px;
@@ -314,5 +868,19 @@ defineExpose({
 .radioStyle:focus {
   background-color: #069255;
   border-color: #069255;
+}
+
+:deep(.ant-btn.ant-btn-primary) {
+  background: #efefef;
+  border-color: #efefef;
+  border-radius: 15px;
+}
+
+.ant-modal-header {
+  background: #069255 !important;
+}
+.red {
+  color: white;
+  background: #069255;
 }
 </style>
