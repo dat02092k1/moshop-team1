@@ -1,45 +1,52 @@
 <template>
   <div class="login__page">
-    <!--    <button :class="$style.btn-test"></button>-->
-    <div class="login-logo">
+    <div class="login-logo mb-[45px]">
       <img
         src="https://moshop.com.vn/_nuxt/img/moshop.5640f4d.png"
         alt=""
         srcset=""
       />
     </div>
-    <div class="login-section grid grid-cols-1">
-      <p class="section-header">Đăng Nhập</p>
-      <div class="section-form">
-        <form action="" class="grid grid-cols-1">
-          <div class="field-item grid grid-cols-1">
-            <label class="field-title" for="username"
-              >Số điện thoại hoặc email</label
-            >
-            <input
-              type="text"
-              v-model="username"
-              autofocus
-              placeholder="Nhập tên cửa hàng"
-            />
-          </div>
-          <div class="field-item grid grid-cols-1">
-            <label class="field-title" for="password">Mật Khẩu</label>
-            <input
-              type="password"
-              v-model="password"
-              placeholder="Nhập Mật Khẩu"
-            />
-            
-          </div>
-        </form>
+
+    <div>
+      <div class="bg-red-500 text-white p-3 rounded w-[350px] mx-[20px] flex justify-center" v-if="loginFunc.check">
+        <span
+          >Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui lòng
+          thử lại!</span
+        >
       </div>
-      <div class="section-footer">
-        <button @click="loginHandle" class="btn-login">Đăng Nhập</button>
-      </div>
-      <div class="register-shop">
-        Bạn chưa có tài khoản?
-        <span class="register-shop__link">Đăng kí ngay!</span>
+      <div class="login-section grid grid-cols-1 mt-6">
+        <p class="section-header">Đăng Nhập</p>
+        <div class="section-form">
+          <form action="" class="grid grid-cols-1">
+            <div class="field-item grid grid-cols-1">
+              <label class="field-title" for="username"
+                >Số điện thoại hoặc email</label
+              >
+              <input
+                type="text"
+                v-model="username"
+                autofocus
+                placeholder="Nhập tên cửa hàng"
+              />
+            </div>
+            <div class="field-item grid grid-cols-1">
+              <label class="field-title" for="password">Mật Khẩu</label>
+              <input
+                type="password"
+                v-model="password"
+                placeholder="Nhập Mật Khẩu"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="section-footer">
+          <button @click="loginHandle" class="btn-login">Đăng Nhập</button>
+        </div>
+        <div class="register-shop">
+          Bạn chưa có tài khoản?
+          <span class="register-shop__link">Đăng kí ngay!</span>
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +55,7 @@
 import { ref, reactive } from "vue";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
-import {useLoginStore} from "../../stores/counter.js"
+import { useLoginStore } from "../../stores/counter.js";
 import { useStaffStore } from "../../stores/store.js";
 const username = ref("hncp7@gmail.com");
 const password = ref("Reset0103");
@@ -57,8 +64,8 @@ const loginFunc = useLoginStore();
 const loadStaff = useStaffStore();
 import { format, isToday } from "date-fns";
 const currentDate = new Date();
-const today = format(currentDate, "yyyy-MM-dd"); 
-
+const today = format(currentDate, "yyyy-MM-dd");
+console.log(loginFunc.check);
 async function loginHandle() {
   // const res = await axios.post("https://x.ghtk.vn/api/fulfilment/auth/login", {
   //   username: this.username,
@@ -68,11 +75,11 @@ async function loginHandle() {
   //   localStorage.setItem("acessToken", res.data.data.access_token);
   //   console.log(res.data.data);
   //   router.push("/staff/home");
-    
+
   // }
-  console.log(username.value);   
-  loadStaff.getStaff(today, today)
-  loginFunc.getLogin(username.value, password.value)
+  console.log(username.value);
+  loadStaff.getStaff(today, today);
+  loginFunc.getLogin(username.value, password.value);
   // setInterval((() => {console.log(loginFunc.user.id);}), 5000)
 }
 
@@ -96,11 +103,7 @@ defineExpose({
 // });
 </script>
 <style scoped>
-.btn-test {
-  background-color: red;
-  width: 100px;
-  height: 100px;
-}
+
 ::placeholder {
   opacity: 0.4;
 }
@@ -130,8 +133,7 @@ defineExpose({
 .section-form {
   padding: 15px;
 }
-.section-form form {
-}
+ 
 .field-title {
   font-size: 14px;
   font-weight: 700;

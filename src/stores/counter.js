@@ -8,6 +8,7 @@ export const useLoginStore = defineStore({
   id: "auth",
   state: () => ({
     user: [],
+    check: false,
   }),
   actions: {
     async getLogin(username, password) {
@@ -18,15 +19,25 @@ export const useLoginStore = defineStore({
         })
         .then((res) => {
           this.user = res.data.data;
-          console.log(this.user.shop.token);
-          if (res.status === 200) {
+          console.log(res);
+          // console.log(this.user.shop.token);
+          // if (res.status === 200) {
+          //   console.log('save token');
+          //   localStorage.setItem("acessToken", res.data.data.access_token);
+          //   localStorage.setItem("userId", this.user.shop.id);
+          //   router.push("/staff/home");
+          //   localStorage.removeItem("user");
+          // } 
+          if (res.data.success === false) {
+            console.log('error');
+            this.check = true;
+          } 
+          else {
             console.log('save token');
-            localStorage.setItem("acessToken", res.data.data.access_token);
-            localStorage.setItem("userId", this.user.shop.id);
+            // localStorage.setItem("acessToken", res.data.data.access_token);
+            // localStorage.setItem("userId", this.user.shop.id);
             router.push("/staff/home");
-            localStorage.removeItem("user");
-            // console.log(this.$router);
-            // this.$router.push("/staff/home");
+            ;
           }
           //   router.push("/staff/home");
         });
