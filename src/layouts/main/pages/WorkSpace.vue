@@ -8,13 +8,18 @@
       @focus="focus"
       @change="handleChange"
     >
-      <a-select-option value="jack">0355263237, Huyện Hòa Vang, Đà Nẵng</a-select-option>
-      <a-select-option value="lucy">Tòa CT2B chung cư Nghĩa Đô ngõ 106, Quận Cầu Giấy, Hà Nội</a-select-option>
-      <a-select-option value="Yiminghe">mtd số 15 ngõ 29/4 , Quận Thanh Xuân, Hà Nội</a-select-option>
+      <a-select-option value="jack"
+        >0355263237, Huyện Hòa Vang, Đà Nẵng</a-select-option
+      >
+      <a-select-option value="lucy"
+        >Tòa CT2B chung cư Nghĩa Đô ngõ 106, Quận Cầu Giấy, Hà
+        Nội</a-select-option
+      >
+      <a-select-option value="Yiminghe"
+        >mtd số 15 ngõ 29/4 , Quận Thanh Xuân, Hà Nội</a-select-option
+      >
     </a-select>
   </a-space>
-
-  
 </template>
 <script>
 import { defineComponent, ref } from "vue";
