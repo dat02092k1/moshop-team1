@@ -1,24 +1,29 @@
 <link rel="stylesheet" href="AddMain/css/AddMain.css">
 <script setup>
-import { ref } from "vue";
+import {computed, ref} from "vue";
 // import axios from "axios";
 import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
 import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
 import ProfileStaff from "./AddMain/ProfileStaff.vue";
 import JobInfomation from "./AddMain/JobInfomation.vue";
 
+
 // import { useAddMainStore } from "../../../stores/counter.js";
 // const store = useAddMainStore();
 const getListWorkPlace = ref([]);
 const refInfoForm = ref();
+const refJobInfomation = ref()
+
 function handleSaveData() {
   refInfoForm.value.callValidateOnSubmit();
+  refJobInfomation.value.handleGetValueCheckBox()
 }
 </script>
 <template>
+
   <div class="grid grid-cols-1 mt-5 mx-5">
     <div class="head flex justify-between">
-      <div class="head-back">
+      <RouterLink to="/staff/home" class="head-back">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-8 w-8"
@@ -33,7 +38,7 @@ function handleSaveData() {
             d="M15 19l-7-7 7-7"
           />
         </svg>
-      </div>
+      </RouterLink>
       <div class="head-action">
         <button class="btn-head-action" @click="handleSaveData">Lưu</button>
         <!--              <a-modal :visible="visible" title="Xác nhận đăng ký">-->
@@ -78,7 +83,7 @@ function handleSaveData() {
       <div class="page_jobInfomation md:col-span-2 lg:col-span-1 sm:col-span-2">
         <fieldset class="bunker__info">
           <legend class="bunker-title">Thông tin công việc</legend>
-          <JobInfomation :get-list-work-place="getListWorkPlace" />
+          <JobInfomation ref="refJobInfomation" :get-list-work-place="getListWorkPlace" />
         </fieldset>
       </div>
       <div class="page_profileStaff md:col-span-2 lg:col-span-1 sm:col-span-2">

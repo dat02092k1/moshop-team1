@@ -21,6 +21,7 @@
       </a-form-item>
     </div>
     <div class="col-span-2">
+
       <a-form-item ref="password" label="Mật khẩu" name="password">
         <a-input-password
           v-model:value="formState.password"

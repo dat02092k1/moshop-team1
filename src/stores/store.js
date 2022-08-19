@@ -42,11 +42,10 @@ export const useStaffStore = defineStore({
           {
             headers: {
               Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IiJ9.eyJ0b2tlbiI6IjNkZDU5ZWE5MDgyYWQ5ODYyYWVmYTczYTE0OTE2ZDJlN2JmN2YxYjdhZWRiMmNlZGQxMThkZDg5YzQ3ODg3MmQiLCJleHBpcmVkX2F0IjoiMjAyMS0wOC0xOVQwNTozNzozOC41MTA0MzBaIiwibW9fdGVsIjoiODQzNTYyNjIxMjEiLCJtb19yb2xlIjoiYWRtaW4iLCJtb191c2VybmFtZSI6ImhuY3A3QGdtYWlsLmNvbSJ9.M7U2RSNivrc0wFDhmXiOJgvhj2oH6AGNVNGxJ1OxDvA`,
-            }
+            },
           }
         )
         .then((res) => {
-          
           this.status = res.data;
           console.log(res.data);
         });
@@ -54,9 +53,8 @@ export const useStaffStore = defineStore({
     async clearStaff() {
       this.staff = [];
     },
-    getDateTime() {       
+    getDateTime() {
       return format(date, "HH:mm");
     },
-
   },
 });

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex">
-      <p class="title-time">{{ props.index + 1 }}. Từ</p>
+      <p class="title-time">{{ props.no + 1 }}. Từ</p>
       <a-time-picker
         v-model:value="timeStartWork"
         value-format="HH:mm:ss"
@@ -25,15 +25,17 @@
     <a-checkbox-group
       class="mt-5"
       :options="labelCheckbox"
-      @change="handleGetValueCheckBox"
+
     />
   </div>
 </template>
 <script setup>
 import { reactive, ref, watchEffect } from "vue";
+
 const timeStartWork = ref();
 const timeEndWork = ref();
 let checkWorkTime = reactive([]);
+
 const workTimeRepeats = ref({
   index: props.index,
   start_time: null,
@@ -41,7 +43,7 @@ const workTimeRepeats = ref({
   repeats: [],
 });
 const dateWorkWait = reactive([]);
-const props = defineProps(["index", "listWorkTime", "sendId"]);
+const props = defineProps(["index", "listWorkTime", "sendId", "no"]);
 const emit = defineEmits([
   "emitHandleDeleteCompWorkTime",
   "sendTimeWork",
@@ -60,6 +62,7 @@ let dateOptions = {
 const labelCheckbox = Object.keys(dateOptions);
 
 function handleDeleteCompWorkTime(index) {
+  console.log(index);
   emit("emitHandleDeleteCompWorkTime", index);
   // console.log(index)
 }
@@ -84,12 +87,14 @@ function handleGetValueCheckBox(e) {
     workTimeRepeats.value.repeats = newWork;
     // console.log(workTimeRepeats.value); //work_time_repeats data ok
     checkWorkTime = workTimeRepeats.value;
+    // console.log(checkWorkTime)
+    store.test = checkWorkTime;
+    // console.log(store.test);
   } else {
     alert("phai nhap thoi gian");
   }
 }
-
-console.log(checkWorkTime)
+defineExpose({ handleGetValueCheckBox });
 </script>
 <style scoped>
 @import "../css/AddWorkTime.css";

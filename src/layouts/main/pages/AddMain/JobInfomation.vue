@@ -6,7 +6,7 @@
     <!--    ref="formJobInfomationState.addressJob"-->
     <a-form-item name="addressJob" label="Nơi làm việc">
       <a-select
-        v-model:value="getListWorkPlace"
+        v-model:value="filterValue"
         show-search
         allow-clear
         placeholder="Chọn nơi làm việc"
@@ -28,9 +28,10 @@
       <div class="jobInfo-item-title">Thời gian làm việc</div>
       <AddWorkingTime
         v-for="(list, index) in listWorkTime"
-        :key="index"
+        :key="list"
+        :no="index"
         class="mb-5"
-        :index="index"
+        :index="list"
         :list-work-time="listWorkTime"
         :send-id="list"
         @emitHandleDeleteCompWorkTime="HandleDeleteCompWorkTime"
@@ -46,7 +47,7 @@
         >Chats chốt đơn</a-checkbox
       >
       <ul v-show="checked" class="list-checkbox">
-<!--        <a-checkbox>Tất cả</a-checkbox>-->
+        <!--        <a-checkbox>Tất cả</a-checkbox>-->
         <li v-for="(page, index) in getPages" :key="index">
           <a-checkbox>
             <img
@@ -108,16 +109,19 @@
   </a-form>
 </template>
 <script setup>
+
 import { onMounted, reactive, ref, watchEffect } from "vue";
 import axios from "axios";
 import TOKEN from "../../../../service/AllApi";
 import AddWorkingTime from "./WorkTime/AddWorkingTime.vue";
 import ButtonAddWorkTime from "./WorkTime/ButtonAddWorkTime.vue";
+
 // let options = ref([]);
 // let isShowListPage = ref(false);
 const getPages = ref({});
 const getListWorkPlace = ref([]);
 const checked = ref(false);
+const index = ref(1);
 
 const formJobInfomationState = ref({
   addressJob: "",
@@ -232,11 +236,15 @@ onMounted(async () => {
     console.log(error);
   }
 });
-function handleParentEmit(data) {
-  listWorkTime.value.push(data);
+function handleParentEmit() {
+  listWorkTime.value.push(index.value);
+  index.value++;
 }
 function HandleDeleteCompWorkTime(index) {
-  listWorkTime.value.splice(index, 1);
+  console.log(index);
+  console.log(listWorkTime);
+  const position = listWorkTime.value.indexOf(index);
+  listWorkTime.value.splice(position, 1);
 }
 </script>
 <style scoped>
