@@ -197,7 +197,7 @@ export const historyEmployeeStore = defineStore({
                 })
                 this.activity_history = reponse.data.data;
                 if(this.activity_history.length == 0) {
-                    this.isHCheck == false;
+                    this.isHCheck = false;
                 }
                 this.activity_history.map((state) => {
                     this.arrayAllDate.push(state.time.slice(0, 10))

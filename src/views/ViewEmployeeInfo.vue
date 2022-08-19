@@ -196,12 +196,12 @@ onMounted(async () => {
         </a>
       </div>
     </div>
-    <div class="ket_qua_cong_viec my-10 max-w-[100%]">
+    <div class="ket_qua_cong_viec my-10">
       <fieldset
         class="fieldset-nav"
       >
         <legend
-          class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border"
+          class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
         >
           Kết quả công việc
         </legend>
@@ -309,14 +309,14 @@ onMounted(async () => {
           class="fieldset-nav "
         >
           <legend
-            class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border"
+            class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
             Thông tin công việc
           </legend>
           <div class="m-10 text-[14px]">
-            <div class="pb-3 grid grid-cols-3 gap-8 items-center">
+            <div class="grid grid-cols-3 gap-8 items-center">
               <p class="col-span-1 font-semibold">Ngày bắt đầu làm việc</p>
-              <div class="col-span-2 bg-l_grey rounded">
+              <div class="col-span-2 bg-l_grey rounded flex items-center">
                 <p class="px-5 py-2">{{ view.employees.work_first_date }}</p>
               </div>
             </div>
@@ -340,7 +340,7 @@ onMounted(async () => {
                     <span class="font-semibold pr-2">{{ id + 1 }}</span>
                     <span>Từ</span>
                     <div
-                      class="mx-2 py-2 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
+                      class="mx-2 pt-3 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
                     >
                       <span>{{ timeWork.start_time }}</span>
                       <p><i class="fa-regular fa-clock"></i></p>
@@ -349,7 +349,7 @@ onMounted(async () => {
                   <div class="m-2 flex items-center">
                     <span>đến</span>
                     <div
-                      class="mx-4 py-2 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
+                      class="mx-4 pt-3 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
                     >
                       <span>{{ timeWork.end_time }}</span>
                       <p><i class="fa-regular fa-clock"></i></p>
@@ -362,7 +362,7 @@ onMounted(async () => {
                     v-for="index in view.time_work"
                   >
                     <div
-                      class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
+                      class="text-l_gray py-1 px-2 mr-2 bg-white border border-l_gray rounded-full"
                       :class="{ timeDay: timeWork.repeats.includes(index) }"
                     >
                       <span>{{ view.showWorkDay(index) }}</span>
@@ -419,7 +419,7 @@ onMounted(async () => {
                     v-for="item in view.employees.pages.shop_pages"
                   >
                     <div
-                      class="absolute top-[3px] rounded"
+                      class="absolute top-[6px] rounded"
                       v-if="item.noti_mode == 1"
                     >
                       <img
@@ -549,11 +549,11 @@ onMounted(async () => {
           class="fieldset-nav "
         >
           <legend
-            class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border"
+            class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
             Lịch sử hoạt động
           </legend>
-          <div class="mx-10 mt-5">
+          <div class="mx-4 mt-5 flex ">
             <button
               class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
               :class="{ clickBtn: history.isGreen == 1 }"
@@ -576,7 +576,7 @@ onMounted(async () => {
               Tháng này
             </button>
             <button
-              class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+              class="mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
               :class="{ clickBtn: history.isGreen == 4 }"
               @click="history.clickToOption()"
             >
@@ -584,14 +584,14 @@ onMounted(async () => {
             </button>
           </div>
           <div
-            class="scroll-bar mx-10 mb-10 mt-2 text-[14px] overflow-y-auto h-[450px]"
+            class="scroll-bar mx-4 mb-10 mt-2 text-[14px] overflow-y-auto h-[450px]"
             v-if="history.isHCheck"
           >
             <div
               class="thoi_gian"
               v-for="date in history.arrayDate[0]"
               v-if="history.isHistory == 0"
-            >
+            > 
               <p class="px-2 font-semibold text-[16px]">
                 {{ history.countDate(date) }} - {{ history.showDate(date) }}
               </p>
