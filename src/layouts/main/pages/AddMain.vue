@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="AddMain/css/AddMain.css">
 <script setup>
 import { ref } from "vue";
 // import axios from "axios";
@@ -15,7 +16,7 @@ function handleSaveData() {
 }
 </script>
 <template>
-  <div class="grid grid-cols-1">
+  <div class="grid grid-cols-1 mt-5 mx-5">
     <div class="head flex justify-between">
       <div class="head-back">
         <svg
@@ -106,7 +107,7 @@ function handleSaveData() {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .head-back svg {
   color: #069255;
 }

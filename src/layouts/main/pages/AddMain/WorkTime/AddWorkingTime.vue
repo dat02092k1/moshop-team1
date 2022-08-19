@@ -92,23 +92,5 @@ function handleGetValueCheckBox(e) {
 console.log(checkWorkTime)
 </script>
 <style scoped>
-.btn-delete-working-time {
-  color: red;
-  cursor: pointer;
-  margin-left: 10px;
-}
-:deep(.ant-picker) {
-  width: 30%;
-}
-/*:deep(.ant-checkbox-inner) {*/
-/*  display: none;*/
-/*}*/
-:deep(.ant-checkbox + span) {
-  border: 1px solid #069255;
-  padding: 2px 8px;
-  border-radius: 15px;
-}
-.title-time {
-  margin: 10px 5px;
-}
+@import "../css/AddWorkTime.css";
 </style>

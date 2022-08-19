@@ -134,17 +134,5 @@ defineExpose({
 });
 </script>
 <style scoped>
-:deep(.ant-form-item-required):before {
-  display: none !important;
-}
-:deep(.ant-form-item-required):after {
-  content: "*";
-  color: red;
-}
-:deep(.ant-form-item-label > label) {
-  width: 200px !important;
-}
-:deep(.ant-picker) {
-  width: 100%;
-}
+@import "../css/InfoForm.css";
 </style>
