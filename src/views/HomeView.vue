@@ -10,7 +10,7 @@ onMounted(() => {
  </script>
 
 <template>
-  <main>
-    <button class="text-xl font-bold bg-red-600" type="button">abc</button>
-   </main>
+  <div>
+    Home
+  </div>
 </template>
