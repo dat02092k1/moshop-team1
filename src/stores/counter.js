@@ -1,33 +1,58 @@
+import axios from "axios";
 import { defineStore } from "pinia";
-import { reactive } from "vue";
-export const useAddMainStore = defineStore("useAddMainStore", () => {
-  const dataAddMain = reactive({
-    birthday: String,
-    fullname: String,
-    tel: String,
-    password: String,
-    live_address: String,
-    avatar: null,
-    work_first_date: String,
-    work_address: null,
-    work_time_repeats: [
-      {
-        start_time: null,
-        end_time: null,
-        repeats: [],
-      },
-    ],
-    screens: [],
-    pages: [],
-    cmnd_images: [],
-    syll_images: [],
-    hdld_images: [],
-    deleted_image_ids: [],
-  });
+// import { useRouter, useRoute } from "vue-router";
+// const router = useRouter();
+import router from "../router/index.js";
 
-  function hello() {
-    console.log("hello store");
-  }
+export const useLoginStore = defineStore({
+  id: "auth",
+  state: () => ({
+    user: [],
+    check: false,
+  }),
+  actions: {
+    async getLogin(username, password) {
+      await axios
+        .post("https://x.ghtk.vn/api/fulfilment/auth/login", {
+          username,
+          password,
+        })
+        .then((res) => {
+          this.user = res.data.data;
+          console.log(res);
+          // console.log(this.user.shop.token);
+          // if (res.status === 200) {
+          //   console.log('save token');
+          //   localStorage.setItem("acessToken", res.data.data.access_token);
+          //   localStorage.setItem("userId", this.user.shop.id);
+          //   router.push("/staff/home");
+          //   localStorage.removeItem("user");
+          // } 
+          if (res.data.success === false) {
+            console.log('error');
+            this.check = true;
+          } 
+          else {
+            console.log('save token');
+            localStorage.setItem("acessToken", res.data.data.access_token);
+            localStorage.setItem("userId", this.user.shop.id);
+            router.push("/staff/home");
+            ;
+          }
+          //   router.push("/staff/home");
+        });
+    },
+  },
+});
 
-  return { dataAddMain, hello };
+export const useWeekTable = defineStore({
+  id: "table-week",
+  state: () => ({
+    weekShow: false,
+  }),
+  actions: {
+    getWeek() {
+      this.weekShow = true;
+    },
+  },
 });

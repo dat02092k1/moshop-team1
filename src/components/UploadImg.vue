@@ -3,12 +3,12 @@
     <a-upload
       action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       list-type="picture-card"
-      v-model:file-list="fileList"   
+      v-model:file-list="fileList"
       @preview="handlePreview"
     >
       <div v-if="fileList.length < 8">
-        <plus-outlined class="text-green-500 font-bold" />
-        <div class="ant-upload-text text-green-500">Thêm ảnh</div>
+        <plus-outlined />
+        <div class="ant-upload-text">Upload</div>
       </div>
     </a-upload>
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
