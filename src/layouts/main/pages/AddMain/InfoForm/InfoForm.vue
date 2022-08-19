@@ -98,11 +98,12 @@ const rules = {
     },
   ],
 };
+
 const callValidateOnSubmit = () => {
   formRef.value
     .validate()
     .then(() => {
-      console.log(formState.value);
+      console.log(formState.value)
     })
     .catch((error) => {
       console.log("error", error);

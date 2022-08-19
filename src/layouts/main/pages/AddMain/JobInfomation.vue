@@ -46,7 +46,7 @@
         >Chats chốt đơn</a-checkbox
       >
       <ul v-show="checked" class="list-checkbox">
-        <a-checkbox>Tất cả</a-checkbox>
+<!--        <a-checkbox>Tất cả</a-checkbox>-->
         <li v-for="(page, index) in getPages" :key="index">
           <a-checkbox>
             <img
@@ -142,6 +142,9 @@ const screens = [
   "product",
   "staff",
 ];
+// const getPageValue = {
+//
+// }
 // let screens = reactive([]);
 // const innerList = ref(false);
 // const handleChangeScreen = (valueScreen) => {

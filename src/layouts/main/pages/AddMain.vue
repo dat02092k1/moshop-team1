@@ -5,6 +5,7 @@ import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
 import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
 import ProfileStaff from "./AddMain/ProfileStaff.vue";
 import JobInfomation from "./AddMain/JobInfomation.vue";
+
 // import { useAddMainStore } from "../../../stores/counter.js";
 // const store = useAddMainStore();
 const getListWorkPlace = ref([]);
