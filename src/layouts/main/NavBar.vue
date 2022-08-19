@@ -24,9 +24,10 @@
               </li>
 
               <li class="ml-5">
-                <a href="" class="text-[20px] text-white">
+                <a href="" class="tooltip text-[20px] text-white">
                   <i class="fa-solid fa-chart-simple font-bold text-[20px]"></i
-                  >Báo Cáo</a
+                  >Báo Cáo
+                  <span class="tooltiptext text-[12px]">Báo cáo</span></a
                 >
               </li>
 
@@ -96,5 +97,31 @@ function isActive() {
 </script>
 
 <style scoped>
+.tooltip {
+  position: relative;
+  display: inline-block;
+  /* border-bottom: 1px dotted black; */
+}
 
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 100%;
+  height: 50%;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0px 0;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 </style>

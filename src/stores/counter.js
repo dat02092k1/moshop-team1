@@ -34,8 +34,8 @@ export const useLoginStore = defineStore({
           } 
           else {
             console.log('save token');
-            // localStorage.setItem("acessToken", res.data.data.access_token);
-            // localStorage.setItem("userId", this.user.shop.id);
+            localStorage.setItem("acessToken", res.data.data.access_token);
+            localStorage.setItem("userId", this.user.shop.id);
             router.push("/staff/home");
             ;
           }

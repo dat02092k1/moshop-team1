@@ -4,7 +4,7 @@
     <div class="layout">
       <div class="page__header grid grid-cols-1 md:grid-cols-2">
         <div class="left__content px-4">
-          <div class="info">
+          <div class="info mt-3">
             <h1 class="info__title">Quản lý nhân viên</h1>
             <div class="info__live">
               <div class="live__icon">
@@ -48,6 +48,8 @@
             v-model:visible="visible"
             title="Cài đặt KPIs nhân viên"
             @ok="handleOk"
+            class="modalKpi"
+            :footer	="null"
           >
             <div class="setting bg-[#d6d6d6] p-3">
               <h2>Phân công Nhân Viên Chat</h2>
@@ -84,8 +86,8 @@
                 >
               </a-radio-group>
             </div>
-            <div class="mt-4">
-              <button @click="postKpi()" class="bg-[#069255] p-3">Lưu</button>
+            <div class="mt-4 flex justify-center pb-2 ">
+              <button @click="postKpi()" class="bg-[#069255] p-3 w-full rounded text-white text-[18px] font-bold mx-[20px]">Lưu</button>
             </div>
           </a-modal>
           <button class="btn-action" @click="showModalKpi">
@@ -281,7 +283,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('customer_deal')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('customer_deal')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -301,7 +306,10 @@
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">Tỷ lệ chốt</div>
               <div class="head-sort flex">
-                <div @click="sortColAsc('rate_order')" class="head-asc absolute top-1 right-4">
+                <div
+                  @click="sortColAsc('rate_order')"
+                  class="head-asc absolute top-1 right-4"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -316,7 +324,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('rate_order')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('rate_order')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -336,7 +347,10 @@
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">ĐH thành công</div>
               <div class="head-sort flex">
-                <div @click="sortColAsc('order_success')" class="head-asc absolute top-1 right-4">
+                <div
+                  @click="sortColAsc('order_success')"
+                  class="head-asc absolute top-1 right-4"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -351,7 +365,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('order_success')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('order_success')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -371,7 +388,10 @@
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">ĐH hoàn</div>
               <div class="head-sort flex">
-                <div @click="sortColAsc('order_return')" class="head-asc absolute top-1 right-4">
+                <div
+                  @click="sortColAsc('order_return')"
+                  class="head-asc absolute top-1 right-4"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -386,7 +406,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('order_return')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('order_return')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -406,7 +429,10 @@
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">Doanh thu</div>
               <div class="head-sort flex">
-                <div  @click="sortColAsc('revenue')" class="head-asc absolute top-1 right-4">
+                <div
+                  @click="sortColAsc('revenue')"
+                  class="head-asc absolute top-1 right-4"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -421,7 +447,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('revenue')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('revenue')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -441,7 +470,10 @@
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">Phí hoàn</div>
               <div class="head-sort flex">
-                <div @click="sortColAsc('fee')" class="head-asc absolute top-1 right-4">
+                <div
+                  @click="sortColAsc('fee')"
+                  class="head-asc absolute top-1 right-4"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -456,7 +488,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('fee')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('fee')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -476,7 +511,10 @@
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">TG phản hồi TB</div>
               <div class="head-sort flex">
-                <div  @click="sortColAsc('time_reply')" class="head-asc absolute top-1 right-4">
+                <div
+                  @click="sortColAsc('time_reply')"
+                  class="head-asc absolute top-1 right-4"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -491,7 +529,10 @@
                     ></path>
                   </svg>
                 </div>
-                <div @click="sortColDes('time_reply')" class="head-desc absolute top-3 right-2">
+                <div
+                  @click="sortColDes('time_reply')"
+                  class="head-desc absolute top-3 right-2"
+                >
                   <svg
                     data-v-4a39057f=""
                     width="11"
@@ -883,4 +924,22 @@ defineExpose({
   color: white;
   background: #069255;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;  
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bdbdbd; 
+  border-radius: 15px;
+}
 </style>
+
+

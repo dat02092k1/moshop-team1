@@ -9,7 +9,7 @@ export const useStaffStore = defineStore({
     status: [],
     datetime: "",
     isShow: 1,
-    
+    check: false,
   }),
   getters: {
     getSpecifiedStaff: (state) => state.staff,

@@ -9,11 +9,10 @@
     </div>
 
     <div>
-      <div class="bg-red-500 text-white p-3 rounded w-[350px] mx-[20px] flex justify-center" v-if="loginFunc.check">
-        <span
-          >Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui lòng
-          thử lại!</span
-        >
+      <div class="w-full flex justify-center" v-if="loginFunc.check">
+        <div class="bg-red-500 text-white p-3 w-[350px] rounded-[10px]">
+            <span>Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui lòng thử lại!</span>
+        </div>
       </div>
       <div class="login-section grid grid-cols-1 mt-6">
         <p class="section-header">Đăng Nhập</p>

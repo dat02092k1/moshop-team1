@@ -1,7 +1,7 @@
 <template>
   <div class="m-3">
-    <div class="staff-info grid grid-cols-2">
-      <div class="staff-left ml-3">
+    <div class="staff-info grid grid-cols-3">
+      <div class="staff-left ml-3 mr-3">
         <div class="staff-avt">
           <img
             :src="propsStaff.avatar"
@@ -69,7 +69,7 @@
           </a-dropdown>
         </div>
       </div>
-      <div class="staff-right ml-6">
+      <div class="staff-right ml-6 mr-3">
         <div class="staff-name font-bold text-black">
           {{ propsStaff.fullname }}
         </div>
@@ -85,11 +85,11 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="below">
-      <router-link :to="{ name: 'staff.add', params: { id: propsStaff.id } }">
-        <button class="staff-status-btn-primary text-[#069255]">Xem</button>
-      </router-link>
+      <div class="below ml-6">
+        <router-link :to="{ name: 'staff.add', params: { id: propsStaff.id } }">
+          <button class="staff-status-btn-primary text-[#069255]">Xem</button>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
