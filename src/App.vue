@@ -6,8 +6,6 @@ import AddMain from "./layouts/main/pages/AddMain.vue";
 <template>
   <div>
     <AddMain />
-<!--    <ChangeStatusStaff />-->
+    <!--    <ChangeStatusStaff />-->
   </div>
 </template>
-
-<style scoped></style>
