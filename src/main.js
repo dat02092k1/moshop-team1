@@ -10,10 +10,13 @@ import "./index.css";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 
+
+
 const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
+app.use(VueAxios, axios);
 app.use(Antd);
 app.use(VueAxios, axios);
 app.mount("#app");
