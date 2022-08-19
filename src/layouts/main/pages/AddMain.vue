@@ -5,36 +5,81 @@ import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
 import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
 import ProfileStaff from "./AddMain/ProfileStaff.vue";
 import JobInfomation from "./AddMain/JobInfomation.vue";
-import HeadAction from "./AddMain/HeadAction.vue";
+// import { useAddMainStore } from "../../../stores/counter.js";
+// const store = useAddMainStore();
 const getListWorkPlace = ref([]);
-defineExpose(getListWorkPlace);
+const refInfoForm = ref();
+function handleSaveData() {
+  refInfoForm.value.callValidateOnSubmit();
+}
 </script>
 <template>
   <div class="grid grid-cols-1">
-    <HeadAction />
+    <div class="head flex justify-between">
+      <div class="head-back">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="3"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </div>
+      <div class="head-action">
+        <button class="btn-head-action" @click="handleSaveData">Lưu</button>
+        <!--              <a-modal :visible="visible" title="Xác nhận đăng ký">-->
+        <!--                <span>-->
+        <!--                  <p>-->
+        <!--                    Mã OTP vừa được gửi đến số điện thoại quý khách đã đăng ký! Vui-->
+        <!--                    lòng nhập đúng mã OTP để hoàn thành.-->
+        <!--                  </p>-->
+        <!--                </span>-->
+        <!--                <span>-->
+        <!--                  <label for="">Mã OTP</label>-->
+        <!--                  <input class="block" type="text" placeholder="Nhập mã OTP" />-->
+        <!--                </span>-->
+        <!--                <span class="mt-4">-->
+        <!--                  <p>-->
+        <!--                    Lưu ý: Nếu bạn không nhận dược sms báo mã OTP, vui lòng thử lại-->
+        <!--                    hoặc mail về cskh@ghtk.vn để được hỗ trọ nhanh nhất!-->
+        <!--                  </p>-->
+        <!--                </span>-->
+        <!--              </a-modal>-->
+      </div>
+    </div>
+    <!--    <HeadAction @emitSaveData = "handleEmitSaveData" />-->
     <div class="page__info">
       <fieldset class="bunker__info">
         <legend class="bunker-title">Thông tin</legend>
-        <div class="grid sm:grid-cols-12">
-          <div class="avatar col-span-3 inline-block align-top">
+        <div class="grid sm:grid-cols-12 md:col-span-12 lg:col-span-12">
+          <div
+            class="avatar col-span-4 sm:col-span-12 lg:col-span-4 inline-block align-top flex justify-around"
+          >
             <UploadImage />
           </div>
-          <div class="col-span-9">
+          <div class="col-span-8 sm:col-span-12 lg:col-span-8">
             <div class="info_form">
-              <InfoForm />
+              <InfoForm ref="refInfoForm" />
             </div>
           </div>
         </div>
       </fieldset>
     </div>
-    <div class="grid md:grid-cols-12 gap-x-5 flex mt-10">
-      <div class="page_jobInfomation col-span-6">
+    <div class="grid md:grid-cols-2 gap-x-5 gap-y-7 flex mt-10">
+      <div class="page_jobInfomation md:col-span-2 lg:col-span-1 sm:col-span-2">
         <fieldset class="bunker__info">
           <legend class="bunker-title">Thông tin công việc</legend>
           <JobInfomation :get-list-work-place="getListWorkPlace" />
         </fieldset>
       </div>
-      <div class="page_profileStaff col-span-6">
+      <div class="page_profileStaff md:col-span-2 lg:col-span-1 sm:col-span-2">
         <fieldset class="bunker__info">
           <legend class="bunker-title">Hồ sơ nhân viên</legend>
           <div class="profileStaff-item">

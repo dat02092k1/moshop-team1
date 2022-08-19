@@ -6,15 +6,16 @@
     class="grid md:grid-cols-4 gap-x-5 flex"
   >
     <div class="col-span-2">
-      <a-form-item ref="name" label="Tên nhân viên" name="name">
-        <a-input v-model:value="formState.name" />
+      <a-form-item ref="name" label="Tên nhân viên" name="fullname">
+        <a-input v-model:value="formState.fullname" />
       </a-form-item>
-      <a-form-item ref="phone" label="SĐT" name="phone">
-        <a-input v-model:value="formState.phone" />
+      <a-form-item ref="phone" label="SĐT" name="tel">
+        <a-input v-model:value="formState.tel" />
       </a-form-item>
       <a-form-item ref="birthday" label="Ngày sinh" name="birthday">
         <a-date-picker
           v-model:value="formState.birthday"
+          value-format="HH:mm:ss"
           placeholder="Chọn ngày"
         />
       </a-form-item>
@@ -27,7 +28,7 @@
         />
       </a-form-item>
       <a-form-item ref="address" label="Địa chỉ" name="address">
-        <a-input v-model:value="formState.address" allow-clear />
+        <a-input v-model:value="formState.live_address" allow-clear />
       </a-form-item>
     </div>
   </a-form>
@@ -36,16 +37,18 @@
 import { onBeforeUpdate, ref, toRaw } from "vue";
 import axios from "axios";
 import TOKEN from "../../../../../service/AllApi.js";
+// import {useAddMainStore} from "../../../../../stores/counter.js";
+// const store = useAddMainStore();
 const formRef = ref();
 const formState = ref({
-  name: "",
-  phone: "",
+  fullname: "",
+  tel: "",
   birthday: "",
   password: "",
-  address: "",
+  live_address: "",
 });
 const rules = {
-  name: [
+  fullname: [
     {
       required: true,
       message: "Không được để trống tên nhân viên!",
@@ -58,7 +61,7 @@ const rules = {
       trigger: "blur",
     },
   ],
-  phone: [
+  tel: [
     {
       required: true,
       message: "Không được để trống SĐT!",
@@ -83,13 +86,6 @@ const rules = {
       trigger: "blur",
     },
   ],
-  birthday: [
-    {
-      required: true,
-      message: "Không được để trống ngày sinh",
-      trigger: "blur",
-    },
-  ],
   password: [
     {
       required: true,
@@ -101,17 +97,8 @@ const rules = {
       message: "Mật khẩu tối thiểu 6 kí tự !",
     },
   ],
-  address: [
-    {
-      required: true,
-
-      message: "Không được để trống địa chỉ !",
-      trigger: "blur",
-    },
-  ],
 };
-
-const onSubmit = () => {
+const callValidateOnSubmit = () => {
   formRef.value
     .validate()
     .then(() => {
@@ -121,10 +108,10 @@ const onSubmit = () => {
       console.log("error", error);
     });
 };
+// const resetForm = () => {
+//   formRef.value.resetFields();
+// };
 
-const resetForm = () => {
-  formRef.value.resetFields();
-};
 const API_ADD_USER = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
 onBeforeUpdate(async () => {
   try {
@@ -138,7 +125,12 @@ onBeforeUpdate(async () => {
     console.log(error);
   }
 });
-defineExpose(formRef, formState, rules, onSubmit, resetForm);
+defineExpose({
+  formRef,
+  formState,
+  rules,
+  callValidateOnSubmit,
+});
 </script>
 <style scoped>
 :deep(.ant-form-item-required):before {

@@ -5,23 +5,36 @@
     </a-form-item>
     <!--    ref="formJobInfomationState.addressJob"-->
     <a-form-item name="addressJob" label="Nơi làm việc">
-      <select style="width: 440px">
-        <option v-for="(value, index) in getListWorkPlace" :key="index">
+      <a-select
+        v-model:value="getListWorkPlace"
+        show-search
+        allow-clear
+        placeholder="Chọn nơi làm việc"
+        style="width: 440px"
+        :filter-option="filterAddress"
+        @change="handleChangeAddress"
+      >
+        <a-select-option
+          v-for="value in getListWorkPlace"
+          :key="value.id"
+          :value="value.address"
+          :content="value.address"
+        >
           {{ value.address }}
-        </option>
-      </select>
-      <a-space>
-        <!--        <a-select-->
-        <!--          v-for="(value, index) in prop.getListWorkPlace"-->
-        <!--          :key="index"-->
-        <!--          style="width: 100%"-->
-        <!--        ></a-select>-->
-      </a-space>
+        </a-select-option>
+      </a-select>
     </a-form-item>
     <a-form-item>
       <div class="jobInfo-item-title">Thời gian làm việc</div>
-<!--{{log(ListWorkTime)}}-->
-      <AddWorkingTime v-for="(test, index) in ListWorkTime" :key="index" />
+      <AddWorkingTime
+        v-for="(list, index) in listWorkTime"
+        :key="index"
+        class="mb-5"
+        :index="index"
+        :list-work-time="listWorkTime"
+        :send-id="list"
+        @emitHandleDeleteCompWorkTime="HandleDeleteCompWorkTime"
+      />
       <ButtonAddWorkTime @emitTest="handleParentEmit" />
     </a-form-item>
     <a-form-item class="jobInfo-checkbox-group">
@@ -33,6 +46,7 @@
         >Chats chốt đơn</a-checkbox
       >
       <ul v-show="checked" class="list-checkbox">
+        <a-checkbox>Tất cả</a-checkbox>
         <li v-for="(page, index) in getPages" :key="index">
           <a-checkbox>
             <img
@@ -68,26 +82,121 @@
         >Nhân viên (Quản lý nhân viên)</a-checkbox
       >
     </a-form-item>
+    <!--    <a-form-item class="jobInfo-checkbox-group">-->
+    <!--      <div class="jobInfo-item-title">Màn hình được sử dụng</div>-->
+    <!--      <a-checkbox-group @change="handleChangeScreen">-->
+    <!--        <a-checkbox-->
+    <!--          v-for="(screen, index) in options"-->
+    <!--          :key="index"-->
+    <!--          :value="screen"-->
+    <!--          style="width: 100%"-->
+    <!--          >-->
+
+    <!--          {{ checkScreens[screen] }}-->
+    <!--        </a-checkbox>-->
+    <!--        <ul v-if="innerList" v-show="isShowListPage">-->
+    <!--          <li v-for="(page, index) in getPages" :key="index" class="flex">-->
+    <!--            <a-checkbox class="flex">-->
+    <!--              <img :src="page.avatar" class="rounded-full w-6 h-6" alt="" />-->
+
+    <!--              {{ page.name }}</a-checkbox-->
+    <!--            >-->
+    <!--          </li>-->
+    <!--        </ul>-->
+    <!--      </a-checkbox-group>-->
+    <!--    </a-form-item>-->
   </a-form>
 </template>
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, reactive, ref, watchEffect } from "vue";
 import axios from "axios";
 import TOKEN from "../../../../service/AllApi";
 import AddWorkingTime from "./WorkTime/AddWorkingTime.vue";
 import ButtonAddWorkTime from "./WorkTime/ButtonAddWorkTime.vue";
-let isShowAddWorkingTime = ref(false);
-let checked = ref(false);
+// let options = ref([]);
+// let isShowListPage = ref(false);
 const getPages = ref({});
 const getListWorkPlace = ref([]);
+const checked = ref(false);
+
 const formJobInfomationState = ref({
   addressJob: "",
 });
-let ListWorkTime = ref([]);
-const clickCheckbox = () => {
+let listWorkTime = ref([]);
+// const checkScreens = reactive({
+//   sale: "Chats chốt đơn",
+//   chat_ops: "Chats vận hành",
+//   statistic: "Tổng quan (Tổng quan shop)",
+//   order: "Đơn hàng (Quản lý và đăng đơn GHTK)",
+//   customer: "Khách hàng (Quản lý và chăm sóc KH)",
+//   product: "Kho và sản phẩm (Quản lý sản phẩm và xuất nhập)",
+//   staff: "Nhân viên (Quản lý nhân viên)",
+// });
+
+const screens = [
+  "sale",
+  "chat_ops",
+  "statistic",
+  "order",
+  "customer",
+  "product",
+  "staff",
+];
+// let screens = reactive([]);
+// const innerList = ref(false);
+// const handleChangeScreen = (valueScreen) => {
+//   screens = valueScreen;
+//
+//   watchEffect(async () => {
+//     if (screens.includes("sale")) {
+//       try {
+//         const res = await axios.get(
+//           "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code",
+//           {
+//             headers: {
+//               Authorization: "Bearer " + TOKEN.TOKEN,
+//             },
+//           }
+//         );
+//         getPages.value = res.data.data.pages;
+//         innerList.value = true;
+//         isShowListPage.value = true;
+//         console.log(getPages.value);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     } else {
+//       innerList.value = false;
+//       isShowListPage.value = false;
+//     }
+//   });
+// };
+// options = Object.keys(checkScreens);
+function clickCheckbox() {
   checked.value = !checked.value;
-  return checked.value;
+}
+// fillter
+const filterValue = ref();
+const handleChangeAddress = (value) => {
+  filterValue.value = value;
+  console.log(filterValue.value);
 };
+
+const converToNoMark = (str) =>
+  str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+
+const filterOption = (input, value) => {
+  const textToSearch = converToNoMark(input).toLowerCase();
+  const children = converToNoMark(value).toLowerCase();
+  const regex = new RegExp(textToSearch);
+  return regex.test(children);
+};
+const filterAddress = (input, option) => filterOption(input, option.content);
+// end_
 const API = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
 
 watchEffect(async () => {
@@ -115,20 +224,17 @@ onMounted(async () => {
     });
     list.data.data.forEach((value) => {
       getListWorkPlace.value.push(value);
-      // console.table(getListWorkPlace.value);
     });
   } catch (error) {
     console.log(error);
   }
 });
 function handleParentEmit(data) {
-  isShowAddWorkingTime = true;
-  ListWorkTime.value.push(data);
+  listWorkTime.value.push(data);
 }
-
-// function  log(mes) {
-//   console.log(mes)
-// }
+function HandleDeleteCompWorkTime(index) {
+  listWorkTime.value.splice(index, 1);
+}
 </script>
 <style scoped>
 @import "css/JobInfomation.css";

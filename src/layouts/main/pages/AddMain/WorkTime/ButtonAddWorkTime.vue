@@ -21,7 +21,7 @@
 <script setup>
 const emit = defineEmits(["emitTest"]);
 function handleClickAddWorkTime() {
-  emit("emitTest", "add");
+  emit("emitTest");
 }
 </script>
 

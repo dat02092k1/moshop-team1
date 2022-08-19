@@ -35,7 +35,9 @@ function previewFile() {
   );
 
   if (file) {
+
     reader.readAsDataURL(file);
+    console.log(reader);
   }
 }
 </script>
