@@ -1,14 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import ViewEmployeeInfo from "./views/ViewEmployeeInfo.vue";
+import NavBar from "./layouts/main/NavBar.vue";
 
 </script>
 
 <template>
-<ViewEmployeeInfo />
-  
-
-  <RouterView />
+<NavBar />
+<RouterView />
 </template>
 
 <style scoped>
