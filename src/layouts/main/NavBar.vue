@@ -90,7 +90,7 @@
 
 <script setup>
 import DropDown from './navbar/DropDown.vue';
-const active = false;
+let active = false;
 function isActive() {
   active = true;
 }
