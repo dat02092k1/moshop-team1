@@ -15,7 +15,7 @@ function handleSaveData() {
 }
 </script>
 <template>
-  <div class="grid grid-cols-1">
+  <div class="grid grid-cols-1 mt-7">
     <div class="head flex justify-between">
       <div class="head-back">
         <svg

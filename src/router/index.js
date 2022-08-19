@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import AddMain from "../layouts/main/pages/AddMain.vue";
 import Show3 from "../layouts/main/pages/Show3.vue";
 import LoginMain from "../layouts/login/LoginMain.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,6 +43,11 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginMain
+    },
+    {
+      path: "/staff/add",
+      name: "staff.add",
+      component: AddMain
     },
   ],
 });
