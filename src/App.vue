@@ -8,7 +8,8 @@ import Show3 from "./layouts/main/pages/Show3.vue";
 const route = useRoute();</script>
 
 <template>
-   <div>
+<ViewEmployeeInfo />
+  <div>
     <NavBar v-if="route.name !== 'login'" />
     <RouterView />
   </div>
