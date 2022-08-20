@@ -27,17 +27,15 @@ export const useLoginStore = defineStore({
           //   localStorage.setItem("userId", this.user.shop.id);
           //   router.push("/staff/home");
           //   localStorage.removeItem("user");
-          // } 
+          // }
           if (res.data.success === false) {
-            console.log('error');
+            console.log("error");
             this.check = true;
-          } 
-          else {
-            console.log('save token');
+          } else {
+            console.log("save token");
             localStorage.setItem("acessToken", res.data.data.access_token);
             localStorage.setItem("userId", this.user.shop.id);
             router.push("/staff/home");
-            ;
           }
           //   router.push("/staff/home");
         });

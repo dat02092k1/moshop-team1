@@ -92,10 +92,11 @@ onMounted(async () => {
   <div class="m-5">
     <div class="trang_thai flex justify-between relative">
       <div class="py-5">
-        <a href=""
-          ><img
+        <router-link to="/staff/home">
+          <img
             src="https://moshop.com.vn/_nuxt/img/caret-left-green.977777e.svg"
-        /></a>
+        />
+        </router-link>
       </div>
       <div>
         <div class="avt_employee flex justify-center">

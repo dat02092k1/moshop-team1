@@ -76,7 +76,7 @@
             </div>
 
             <div class="setting-off p-3">
-              <h3>NV Offline {{ OffKpi }}</h3>
+              <h3>NV Offline</h3>
               <a-radio-group v-if="OnKpi !== 'all'" v-model:value="OffKpi">
                 <a-radio :style="radioStyleOff" :value="KPImessage[5].value"
                   >Tiếp tục hội thoại sau khi Offline</a-radio
@@ -582,10 +582,8 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import { useStaffStore } from "../../../stores/store.js";
-import TableStaff from "./TableStaff.vue";
 import StaffOnly from "./StaffOnly.vue";
 import PickDate from "./PickDate.vue";
-import SelectDate from "./SelectDate.vue";
 import axios from "axios";
 import { useWeekTable } from "../../../stores/counter";
 import {
