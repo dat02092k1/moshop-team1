@@ -106,7 +106,7 @@ function handleSaveData() {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .head-back svg {
   color: #069255;
 }
