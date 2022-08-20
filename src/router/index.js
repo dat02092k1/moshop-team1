@@ -50,11 +50,12 @@ const router = createRouter({
       component: AddMain
     },
     {
-      path: "/staff/:id",
+      path: "/staff/view/:id",
       name: "staff.view",
       component: ViewEmployeeInfo
     },
   ],
 });
 
+ 
 export default router;

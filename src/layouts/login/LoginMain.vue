@@ -11,13 +11,16 @@
     <div>
       <div class="w-full flex justify-center" v-if="loginFunc.check">
         <div class="bg-red-500 text-white p-3 w-[350px] rounded-[10px]">
-            <span>Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui lòng thử lại!</span>
+          <span
+            >Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui
+            lòng thử lại!</span
+          >
         </div>
       </div>
       <div class="login-section grid grid-cols-1 mt-6">
         <p class="section-header">Đăng Nhập</p>
         <div class="section-form">
-          <form action="" class="grid grid-cols-1">
+          <form action="" class="grid grid-cols-1" @change="validate()">
             <div class="field-item grid grid-cols-1">
               <label class="field-title" for="username"
                 >Số điện thoại hoặc email</label
@@ -56,8 +59,8 @@ import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import { useLoginStore } from "../../stores/counter.js";
 import { useStaffStore } from "../../stores/store.js";
-const username = ref("hncp7@gmail.com");
-const password = ref("Reset0103");
+const username = ref("");
+const password = ref("");
 const router = useRouter();
 const loginFunc = useLoginStore();
 const loadStaff = useStaffStore();
@@ -65,17 +68,10 @@ import { format, isToday } from "date-fns";
 const currentDate = new Date();
 const today = format(currentDate, "yyyy-MM-dd");
 console.log(loginFunc.check);
-async function loginHandle() {
-  // const res = await axios.post("https://x.ghtk.vn/api/fulfilment/auth/login", {
-  //   username: this.username,
-  //   password: this.password,
-  // });
-  // if (res.status === 200) {
-  //   localStorage.setItem("acessToken", res.data.data.access_token);
-  //   console.log(res.data.data);
-  //   router.push("/staff/home");
+ 
 
-  // }
+async function loginHandle() {
+
   console.log(username.value);
   loadStaff.getStaff(today, today);
   loginFunc.getLogin(username.value, password.value);
@@ -102,7 +98,6 @@ defineExpose({
 // });
 </script>
 <style scoped>
-
 ::placeholder {
   opacity: 0.4;
 }
@@ -132,7 +127,7 @@ defineExpose({
 .section-form {
   padding: 15px;
 }
- 
+
 .field-title {
   font-size: 14px;
   font-weight: 700;

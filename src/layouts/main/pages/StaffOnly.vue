@@ -86,9 +86,7 @@
         </div>
       </div>
       <div class="below ml-6">
-        <router-link
-          :to="{path:'/staff/' + propsStaff.id}"
-        >
+        <router-link :to="{ path: '/staff/view/' + propsStaff.id }">
           <button class="staff-status-btn-primary text-[#069255]">Xem</button>
         </router-link>
       </div>

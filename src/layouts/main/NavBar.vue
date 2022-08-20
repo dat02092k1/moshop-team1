@@ -57,12 +57,18 @@
               </li>
 
               <li @click="isActive()" class="ml-5 bg-white  ">
-                <a href="" class="text-[20px] px-2 text-green-500">
+                <!-- <a href="" class="text-[20px] px-2 text-green-500">
                   <i
                     class="fa-regular fa-people-group font-bold text-[20px]"
                   ></i>
                   Nhân viên
-                </a>
+                </a> -->
+                <router-link class="text-[20px] px-2 text-green-500" to="/staff/home">
+          <i
+                    class="fa-regular fa-people-group font-bold text-[20px]"
+                  ></i>
+                  Nhân viên
+        </router-link>
               </li>
 
               <li class="ml-5">
