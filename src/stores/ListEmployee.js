@@ -6,7 +6,6 @@ import viLocale from "date-fns/locale/vi";
 
 // lấy thông tin nhân viên
 const api_url_info = 'https://x.ghtk.vn/api/v2/staff/detail?shop_user_id=';
-// const id = '43aaa969-a97b-46a7-8e96-abd80560bcfe';
 
 export const employeeStore = defineStore({
     id: 'employee',
@@ -44,7 +43,7 @@ export const employeeStore = defineStore({
             this.anHienTrangThai = !this.anHienTrangThai
         },
         thayDoiTrangThai(a, id) {
-            this.changeStatus(a, id)
+            this.changeStatus(id, a)
             this.employees.active = a;
             this.anHienTrangThai = !this.anHienTrangThai;
             this.thongBaoThayDoi = !this.thongBaoThayDoi;
@@ -63,11 +62,11 @@ export const employeeStore = defineStore({
                 default: return 'Chủ nhật';
             }
         },
-        async changeStatus(shop_user_id, status) {
+        async changeStatus(id, status) {
             await axios
               .post("https://x.ghtk.vn/api/v2/staff/set-status",
                 {
-                  shop_user_id: shop_user_id,
+                  shop_user_id: id,
                   status: status,
                 },
                 {
@@ -78,6 +77,9 @@ export const employeeStore = defineStore({
               )
               .then((res) => {
                 this.status = res.data;
+                console.log(res.data)
+                console.log(this.status)
+                console.log(this.id)
               });
           },
           checkIsPage() {

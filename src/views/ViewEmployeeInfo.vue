@@ -92,10 +92,10 @@ onMounted(async () => {
   <div class="m-5">
     <div class="trang_thai flex justify-between relative">
       <div class="py-5">
-        <a href=""
+        <RouterLink to="/staff/home"
           ><img
             src="https://moshop.com.vn/_nuxt/img/caret-left-green.977777e.svg"
-        /></a>
+        /></RouterLink>
       </div>
       <div>
         <div class="avt_employee flex justify-center">
@@ -115,7 +115,7 @@ onMounted(async () => {
           <div class="font-semibold">
             <button
               class="mx-5 px-5 py-1 text-l_green border border-l_green rounded-full"
-              v-if="view.employees.active == 0"
+              v-if="view.employees.active == 1"
               @click="view.clickTrangThai()"
             >
               <span>Đang làm việc</span>
@@ -125,7 +125,7 @@ onMounted(async () => {
             </button>
             <button
               class="mx-5 px-5 py-1 text-l_orange border border-l_orange rounded-full"
-              v-else-if="view.employees.active == 1"
+              v-else-if="view.employees.active == 0"
               @click="view.clickTrangThai()"
             >
               <span>Nghỉ tạm thời</span>
@@ -150,17 +150,6 @@ onMounted(async () => {
           class="z-10 p-5 text-[16px] font-semibold bg-white fixed top-[160px] left-[570px] border-2 border-l_grey rounded-[14px] shadow-lg"
         >
           <table>
-            <tr class="h-[40px]" @click="view.thayDoiTrangThai(0, id)">
-              <td>
-                <img
-                  src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
-                  alt=""
-                  class="mr-3"
-                  v-if="view.employees.active == 0"
-                />
-              </td>
-              <td>Đang làm việc</td>
-            </tr>
             <tr class="h-[40px]" @click="view.thayDoiTrangThai(1, id)">
               <td>
                 <img
@@ -168,6 +157,17 @@ onMounted(async () => {
                   alt=""
                   class="mr-3"
                   v-if="view.employees.active == 1"
+                />
+              </td>
+              <td>Đang làm việc</td>
+            </tr>
+            <tr class="h-[40px]" @click="view.thayDoiTrangThai(0, id)">
+              <td>
+                <img
+                  src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
+                  alt=""
+                  class="mr-3"
+                  v-if="view.employees.active == 0"
                 />
               </td>
               <td>Nghỉ việc tạm thời</td>
