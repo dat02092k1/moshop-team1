@@ -1,5 +1,4 @@
 <template>
-  {{ useStoreInAddMain.dataAddMain.tel }}
   <div class="grid grid-cols-1 mt-5 mx-5">
     <div class="head flex justify-between">
       <RouterLink to="/staff/home" class="head-back">
@@ -19,10 +18,16 @@
         </svg>
       </RouterLink>
       <div class="head-action">
-        <button v-if="isRouter" class="btn-delete-user">Xoá</button>
+        <button
+          v-if="isRouter"
+          class="btn-delete-user"
+          @click="handleDeleteUser"
+        >
+          Xoá
+        </button>
         <button class="btn-head-action" @click="handleSaveData">Lưu</button>
         <!--        modal-->
-        <div v-if="isRouterAdd">
+        <div>
           <a-modal
             :visible="visible"
             class="pr-4"
@@ -36,7 +41,6 @@
               Vui lòng nhập đúng mã OTP để hoàn thành
             </p>
             <input
-
               v-model="confirmOtp"
               type="text"
               class="border h-10 p-5 mx-6"
@@ -127,20 +131,20 @@ const confirmOtp = ref();
 const getListWorkPlace = ref([]);
 const refInfoForm = ref();
 const refJobInfomation = ref();
-
+console.log(useStoreInAddMain.dataAddMain.current_id_user);
 const isRouter = computed(() => {
   return useRouter().currentRoute.value.name === "staff.update";
   // console.log(useRouter().currentRoute.value.name === "staff.update") ;
 });
-const isRouterAdd = computed(() => {
-  return useRouter().currentRoute.value.name === "satff.add";
-});
+// const isRouterAdd = computed(() => {
+//   return useRouter().currentRoute.value.name === "satff.add";
+// });
 // console.log(isRouter)
 // console.log(useStoreInAddMain)
 // const storeReq = useStoreInAddMain.dataAddMain;
 const visible = ref(false);
 async function handleOk() {
-  console.log(confirmOtp.value);
+  // console.log(confirmOtp.value);
   try {
     const res = await axios.post(
       "https://x.ghtk.vn/api/fulfilment/v2/staff/confirm/",
@@ -161,36 +165,60 @@ async function handleOk() {
 
   visible.value = false;
 }
-async function handleSaveData() {
-  const formData = new FormData();
-  formData.append("tel", useStoreInAddMain.dataAddMain.tel);
-  formData.append("avatar", useStoreInAddMain.dataAddMain.avatar);
-  formData.append("fullname", useStoreInAddMain.dataAddMain.fullname);
-  formData.append("birthday", useStoreInAddMain.dataAddMain.birthday);
-  formData.append("password", useStoreInAddMain.dataAddMain.password);
-  formData.append("live_address", useStoreInAddMain.dataAddMain.live_address);
-  formData.append(
-    "work_first_date",
-    useStoreInAddMain.dataAddMain.work_first_date
-  );
-  formData.append("work_address", useStoreInAddMain.dataAddMain.work_address);
-  formData.append("screens", useStoreInAddMain.dataAddMain.screens);
-  formData.append("pages", useStoreInAddMain.dataAddMain.pages);
+async function handleDeleteUser() {
   try {
-    const res = await axios.post(
-      "http://x.ghtk.vn/api/v2/staff/create",
-      formData,
+    await axios.post(
+      "https://x.ghtk.vn/api/v2/staff/destroy",
+      {
+        shop_user_ids: useStoreInAddMain.dataAddMain.current_id_user,
+      },
       {
         headers: {
           Authorization: "Bearer " + TOKEN.TOKEN,
         },
       }
     );
-    console.log(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function handleSaveData() {
+  const formData = new FormData();
+  formData.append("avatar", useStoreInAddMain.dataAddMain.avatar);
+  formData.append("fullname", useStoreInAddMain.dataAddMain.fullname);
+  formData.append("tel", useStoreInAddMain.dataAddMain.tel);
+
+  // formData.append("birthday", useStoreInAddMain.dataAddMain.birthday);
+  formData.append("password", useStoreInAddMain.dataAddMain.password);
+  // formData.append("live_address", useStoreInAddMain.dataAddMain.live_address);
+  // formData.append(
+  //   "work_first_date",
+  //   useStoreInAddMain.dataAddMain.work_first_date
+  // );
+  // formData.append("work_address", useStoreInAddMain.dataAddMain.work_address);
+  // formData.append("screens", useStoreInAddMain.dataAddMain.screens);
+  // formData.append("pages", useStoreInAddMain.dataAddMain.pages);
+  // for (var pair of formData.entries()) {
+  //   console.log(pair[0]+ ', ' + pair[1]);
+  // }
+
+  try {
+    const res = await axios.post(
+      "http://x.ghtk.vn/api/v2/staff/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      }
+    );
+    console.log(res);
     if (res.data.success === true) {
       visible.value = true;
     } else {
-      console.log(res.data.message);
+      console.log(useStoreInAddMain.dataAddMain.tel);
+      console.log(res);
     }
   } catch (error) {
     console.log(error);

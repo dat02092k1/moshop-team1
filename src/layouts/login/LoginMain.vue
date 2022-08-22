@@ -10,7 +10,7 @@
 
     <div>
       <div class="w-full flex justify-center" v-if="loginFunc.check">
-        <div class="bg-red-500 text-white p-3 w-[350px] rounded-[10px]">
+        <div class="bg-red-500 text-white p-3  rounded-[10px]">
           <span
             >Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui
             lòng thử lại!</span

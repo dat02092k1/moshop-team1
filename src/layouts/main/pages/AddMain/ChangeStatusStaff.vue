@@ -1,11 +1,13 @@
 <template>
   <div class="flex">
     <p class="title-status">Trạng thái</p>
-    <select id="change-status"  @change="getValueStatus">
-      <option value="1">Đang làm việc</option>
-      <option value="0">Nghỉ tạm thời</option>
-      <option value="2">Đã nghỉ việc</option>
-    </select>
+    <div id="borderStatus">
+      <select id="change-status" :style="{color:value1}" @change="getValueStatus">
+        <option value="1" style="color: red">Đang làm việc</option>
+        <option value="0">Nghỉ tạm thời</option>
+        <option value="2">Đã nghỉ việc</option>
+      </select>
+    </div>
   </div>
 </template>
 <script setup>
@@ -13,24 +15,30 @@ import { ref } from "vue";
 import axios from "axios";
 
 import TOKEN from "../../../../service/AllApi.js";
-
+const colorvar = "red";
+const value1 = "#28a745"
+const value0 = "#ffc107";
+const value2 = "#dc3545"
 import { useAddMainStore } from "../../../../stores/addMainStore";
 const statusRef = ref();
 const shop_user_id = useAddMainStore().dataAddMain.current_id_user;
 
 const select = document.getElementById("change-status");
+const select2 = document.getElementById("borderStatus");
 // console.log(select.value)
 async function getValueStatus(e) {
   console.log("sdsd", e.target.value);
   const value = e.target.value;
   if (value === 1) {
-    statusRef.value.style.border = "3px solid #28a745";
+    // select.style.border = "3px solid #28a745";
+    select.style.color="red"
+    // statusRef.value.style.border = "3px solid #28a745";
   }
   if (value === 0) {
-    statusRef.value.style.borderColor = "#28a745";
+    select.style.border = "3px solid red";
   }
   if (value === 2) {
-    statusRef.value.style.borderColor = "#dc3545";
+    select.style.border = "3px solid black";
   }
 
   await axios
@@ -47,7 +55,7 @@ async function getValueStatus(e) {
       }
     )
     .then((res) => {
-      console.log(res.data)
+      console.log(res.data);
     });
 }
 </script>
@@ -84,10 +92,15 @@ async function getValueStatus(e) {
   font-weight: 400;
   margin-right: 33%;
 }
+.borderStatus {
+  border: 3px solid red;
+}
 #change-status {
-  border: 3px solid black;
+  border: 1px solid #069255;
+  color: #069255;
   height: 30px;
-  width: 200px;
+  width: 150px;
+  margin-left: 20px;
   border-radius: 20px;
   margin-bottom: 25px;
 }

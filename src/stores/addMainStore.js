@@ -1,6 +1,8 @@
 // import axios from "axios";
 import { defineStore } from "pinia";
 import { reactive } from "vue";
+import axios from "axios";
+import TOKEN from "../service/AllApi";
 export const useAddMainStore = defineStore("useAddMainStore", () => {
   const dataAddMain = reactive({
     birthday: null,
@@ -28,12 +30,9 @@ export const useAddMainStore = defineStore("useAddMainStore", () => {
     preview_img_syll: [],
     preview_img_hdld: [],
     current_id_user: null,
-    confirmOtp:null
+    confirmOtp: null,
+    defaultAvatar:null
   });
 
-  // });
-  function hello() {
-    console.log("hello");
-  }
-  return { dataAddMain, hello };
+  return { dataAddMain };
 });

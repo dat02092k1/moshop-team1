@@ -10,6 +10,7 @@ const route = useRoute();
 const idUpdate = route.params.id;
 useStoreInUpdate.dataAddMain.current_id_user = idUpdate;
 // console.log("id", idUpdate)
+
 let userStore = useStoreInUpdate.dataAddMain;
 onMounted(async () => {
   try {
@@ -34,10 +35,43 @@ onMounted(async () => {
     userStore.work_first_date = resData.work_first_date;
     userStore.work_address = resData.work_address;
     userStore.screens = resData.screens;
+    userStore.defaultAvatar = resData.avatar
+
   } catch (error) {
     console.log(error);
   }
-});
+})
+
+
+async function handleUpdateUser() {
+  const formDataUpdate = new formData();
+  formDataUpdate.append("avatar", useStoreInUpdate.dataAddMain.avatar);
+  formDataUpdate.append("fullname", useStoreInUpdate.dataAddMain.fullname);
+  formDataUpdate.append("tel", useStoreInUpdate.dataAddMain.tel);
+  formDataUpdate.append("birthday", useStoreInUpdate.dataAddMain.birthday);
+
+  try {
+    const res = await axios.post(
+      "http://x.ghtk.vn/api/v2/staff/update/",
+        formDataUpdate,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      }
+    );
+    console.log(res);
+    if (res.data.success === true) {
+      visible.value = true;
+    } else {
+      console.log(useStoreInAddMain.dataAddMain.tel);
+      console.log(res);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 </script>
 <template>
   <AddMain />
