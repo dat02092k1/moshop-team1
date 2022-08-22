@@ -217,6 +217,9 @@ export const historyEmployeeStore = defineStore({
         },
         clickToDay(a) {
             this.arrayToSearch = [];
+            this.arrayAllDate = [];
+            this.arrayDate = [];
+
             this.activity_history.map((state) => {
                 const dateState = new Date(state.time.slice(0, 10));
                 const now = addDays(date, 1);
@@ -236,6 +239,9 @@ export const historyEmployeeStore = defineStore({
         },
         clickToWeek(a) { 
             this.arrayToSearch = [];
+            this.arrayAllDate = [];
+            this.arrayDate = [];
+
             this.activity_history.map((state) => {
                 const dateState = new Date(state.time.slice(0, 10));
                 const start_to_Week = startOfWeek(date);
@@ -257,6 +263,9 @@ export const historyEmployeeStore = defineStore({
         },
         clickToMonth(a) {
             this.arrayToSearch = [];
+            this.arrayAllDate = [];
+            this.arrayDate = [];
+            
             this.activity_history.map((state) => {
                 const dateState = new Date(state.time.slice(0, 10));
                 const start_to_Month = startOfMonth(date);
