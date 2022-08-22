@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import {useRoute} from "vue-router"
+import { useRoute } from "vue-router";
 import {
   employeeStore,
   resultEmployeeStore,
@@ -8,10 +8,8 @@ import {
   listAddressStore,
   listPageStore,
 } from "../stores/ListEmployee.js";
-const route = useRoute()
-
-const id = route.params.id
-
+const route = useRoute();
+const id = route.params.id;
 const view = employeeStore();
 const results = resultEmployeeStore();
 const history = historyEmployeeStore();
@@ -92,10 +90,10 @@ onMounted(async () => {
   <div class="m-5">
     <div class="trang_thai flex justify-between relative">
       <div class="py-5">
-        <RouterLink to="/staff/home"
+        <a href=""
           ><img
             src="https://moshop.com.vn/_nuxt/img/caret-left-green.977777e.svg"
-        /></RouterLink>
+        /></a>
       </div>
       <div>
         <div class="avt_employee flex justify-center">
@@ -114,8 +112,8 @@ onMounted(async () => {
           <span class="font-bold">Trạng thái</span>
           <div class="font-semibold">
             <button
+              v-if="view.employees.active == 0"
               class="mx-5 px-5 py-1 text-l_green border border-l_green rounded-full"
-              v-if="view.employees.active == 1"
               @click="view.clickTrangThai()"
             >
               <span>Đang làm việc</span>
@@ -124,8 +122,8 @@ onMounted(async () => {
               ></a>
             </button>
             <button
+              v-else-if="view.employees.active == 1"
               class="mx-5 px-5 py-1 text-l_orange border border-l_orange rounded-full"
-              v-else-if="view.employees.active == 0"
               @click="view.clickTrangThai()"
             >
               <span>Nghỉ tạm thời</span>
@@ -134,8 +132,8 @@ onMounted(async () => {
               ></a>
             </button>
             <button
-              class="mx-5 px-5 py-1 text-l_red border border-l_red rounded-full"
               v-else
+              class="mx-5 px-5 py-1 text-l_red border border-l_red rounded-full"
               @click="view.clickTrangThai()"
             >
               <span>Đã nghỉ việc</span>
@@ -150,24 +148,24 @@ onMounted(async () => {
           class="z-10 p-5 text-[16px] font-semibold bg-white fixed top-[160px] left-[570px] border-2 border-l_grey rounded-[14px] shadow-lg"
         >
           <table>
-            <tr class="h-[40px]" @click="view.thayDoiTrangThai(1, id)">
+            <tr class="h-[40px]" @click="view.thayDoiTrangThai(0, id)">
               <td>
                 <img
+                  v-if="view.employees.active == 0"
                   src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
                   alt=""
                   class="mr-3"
-                  v-if="view.employees.active == 1"
                 />
               </td>
               <td>Đang làm việc</td>
             </tr>
-            <tr class="h-[40px]" @click="view.thayDoiTrangThai(0, id)">
+            <tr class="h-[40px]" @click="view.thayDoiTrangThai(1, id)">
               <td>
                 <img
+                  v-if="view.employees.active == 1"
                   src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
                   alt=""
                   class="mr-3"
-                  v-if="view.employees.active == 0"
                 />
               </td>
               <td>Nghỉ việc tạm thời</td>
@@ -175,10 +173,10 @@ onMounted(async () => {
             <tr class="h-[40px]" @click="view.thayDoiTrangThai(2, id)">
               <td>
                 <img
+                  v-if="view.employees.active == 2"
                   src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
                   alt=""
                   class="mr-3"
-                  v-if="view.employees.active == 2"
                 />
               </td>
               <td>Đã nghỉ việc</td>
@@ -187,19 +185,17 @@ onMounted(async () => {
         </div>
       </div>
       <div class="py-5">
-        <a href="">
+        <RouterLink :to="{ path: '/staff/update/' + id }">
           <button
             class="px-[52px] py-[6px] border-2 text-l_cyan border-l_green rounded-full hover:bg-l_cyan hover:text-white transition ease-in-out"
           >
             Sửa
           </button>
-        </a>
+        </RouterLink>
       </div>
     </div>
     <div class="ket_qua_cong_viec my-10">
-      <fieldset
-        class="fieldset-nav"
-      >
+      <fieldset class="fieldset-nav">
         <legend
           class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
         >
@@ -305,9 +301,7 @@ onMounted(async () => {
     </div>
     <div class="pb-[50px] grid lg:grid-cols-2 sm:grid-cols-1 gap-10">
       <div class="thong_tin_cong_viec">
-        <fieldset
-          class="fieldset-nav "
-        >
+        <fieldset class="fieldset-nav">
           <legend
             class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
@@ -329,8 +323,8 @@ onMounted(async () => {
             <div class="py-3">
               <p class="col-span-1 font-semibold">Thời gian làm việc</p>
               <div
-                v-if="view.employees.work_time_repeats != 0"
                 v-for="(timeWork, id) in view.employees.work_time_repeats"
+                v-if="view.employees.work_time_repeats != 0"
                 :key="id"
               >
                 <div
@@ -358,8 +352,8 @@ onMounted(async () => {
                 </div>
                 <div class="flex">
                   <div
-                    class="thu_ngay_thang my-3 flex"
                     v-for="index in view.time_work"
+                    class="thu_ngay_thang my-3 flex"
                   >
                     <div
                       class="text-l_gray py-1 px-2 mr-2 bg-white border border-l_gray rounded-full"
@@ -376,8 +370,8 @@ onMounted(async () => {
               <div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.sale"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -390,10 +384,10 @@ onMounted(async () => {
                   ></div>
                   <span>Chats chốt đơn</span>
                 </div>
-                <div class="mx-8" v-if="view.isPage">
+                <div v-if="view.isPage" class="mx-8">
                   <div
-                    class="pb-2 flex items-center relative"
                     v-for="item in page.listPage"
+                    class="pb-2 flex items-center relative"
                   >
                     <div
                       class="w-[25px] h-[25px] border border-l_green rounded mr-5"
@@ -411,16 +405,16 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div
-                  class="chats-chot-don-items mx-8 pb-2"
                   v-if="view.screen.sale"
+                  class="chats-chot-don-items mx-8 pb-2"
                 >
                   <div
-                    class="pb-2 flex items-center relative"
                     v-for="item in view.employees.pages.shop_pages"
+                    class="pb-2 flex items-center relative"
                   >
                     <div
-                      class="absolute top-[6px] rounded"
                       v-if="item.noti_mode == 1"
+                      class="absolute top-[6px] rounded"
                     >
                       <img
                         src="../assets/l_checked.jpg"
@@ -445,8 +439,8 @@ onMounted(async () => {
                 </div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.chat_ops"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -461,8 +455,8 @@ onMounted(async () => {
                 </div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.statistic"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -477,8 +471,8 @@ onMounted(async () => {
                 </div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.order"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -493,8 +487,8 @@ onMounted(async () => {
                 </div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.customer"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -509,8 +503,8 @@ onMounted(async () => {
                 </div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.products"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -525,8 +519,8 @@ onMounted(async () => {
                 </div>
                 <div class="py-3 flex items-center relative">
                   <div
-                    class="absolute top-[12px] rounded"
                     v-if="view.screen.staff"
+                    class="absolute top-[12px] rounded"
                   >
                     <img
                       src="../assets/l_checked.jpg"
@@ -545,15 +539,13 @@ onMounted(async () => {
         </fieldset>
       </div>
       <div class="lich_su_hoat_dong">
-        <fieldset
-          class="fieldset-nav "
-        >
+        <fieldset class="fieldset-nav">
           <legend
             class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
             Lịch sử hoạt động
           </legend>
-          <div class="mx-4 mt-5 flex ">
+          <div class="mx-4 mt-5 flex">
             <button
               class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
               :class="{ clickBtn: history.isGreen == 1 }"
@@ -584,24 +576,24 @@ onMounted(async () => {
             </button>
           </div>
           <div
-            class="scroll-bar mx-4 mb-10 mt-2 text-[14px] overflow-y-auto h-[450px]"
             v-if="history.isHCheck"
+            class="scroll-bar mx-4 mb-10 mt-2 text-[14px] overflow-y-auto h-[450px]"
           >
             <div
-              class="thoi_gian"
               v-for="date in history.arrayDate[0]"
               v-if="history.isHistory == 0"
-            > 
+              class="thoi_gian"
+            >
               <p class="px-2 font-semibold text-[16px]">
                 {{ history.countDate(date) }} - {{ history.showDate(date) }}
               </p>
               <div
-                class="lich_su_hoat_dong"
                 v-for="act in history.activity_history"
+                class="lich_su_hoat_dong"
               >
                 <div
-                  class="px-2 flex justify-between items-center"
                   v-if="act.time.slice(0, 10) == date"
+                  class="px-2 flex justify-between items-center"
                 >
                   <div class="py-2">
                     <p>{{ act.time.split(" ").reverse().join(" ") }}</p>
@@ -613,20 +605,20 @@ onMounted(async () => {
               </div>
             </div>
             <div
-              class="thoi_gian"
               v-for="date in history.arrayDate[0]"
               v-if="history.isHistory != 0"
+              class="thoi_gian"
             >
               <p class="px-2 font-semibold text-[16px]">
                 {{ history.countDate(date) }} - {{ history.showDate(date) }}
               </p>
               <div
-                class="lich_su_hoat_dong"
                 v-for="act in history.arrayToSearch"
+                class="lich_su_hoat_dong"
               >
                 <div
-                  class="px-2 flex justify-between items-center"
                   v-if="act.time.slice(0, 10) == date"
+                  class="px-2 flex justify-between items-center"
                 >
                   <div class="py-2">
                     <p>{{ act.time.split(" ").reverse().join(" ") }}</p>
@@ -639,8 +631,8 @@ onMounted(async () => {
             </div>
           </div>
           <div
-            class="text-center mb-5 mt-2 text-[16px]"
             v-if="history.isHCheck == false"
+            class="text-center mb-5 mt-2 text-[16px]"
           >
             <p>Không có dữ liệu</p>
           </div>
@@ -648,14 +640,14 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-  <div class="thay_doi_thanh_cong" v-if="view.thongBaoThayDoi">
+  <div v-if="view.thongBaoThayDoi" class="thay_doi_thanh_cong">
     <div
       class="w-1/3 p-2 text-white bg-l_green rounded-full text-center fixed bottom-10 left-1/3"
     >
       <p>Thay đổi trạng thái nhân viên thành công</p>
     </div>
   </div>
-  <div class="click_tuy_chon_ket_qua" v-if="results.hienThiTuyChon">
+  <div v-if="results.hienThiTuyChon" class="click_tuy_chon_ket_qua">
     <div class="w-screen h-screen bg-black fixed top-0 opacity-70"></div>
     <div class="z-20 fixed top-[100px] left-1/3">
       <div class="py-3 bg-l_green text-center">
@@ -665,19 +657,19 @@ onMounted(async () => {
         <div class="my-5 ml-5 mr-2 text-l_gray">
           <p class="font-semibold pb-1">Chọn ngày bắt đầu:</p>
           <input
+            v-model="results.selectDay"
             type="date"
             placeholder="Nhập ngày bắt đầu"
             class="w-[250px] py-1 pl-2 border border-l_gray rounded"
-            v-model="results.selectDay"
           />
         </div>
         <div class="my-5 mr-5 ml-2 text-l_gray">
           <p class="font-semibold pb-1">Chọn ngày kết thúc:</p>
           <input
+            v-model="results.selectDay2"
             type="date"
             placeholder="Nhập ngày kết thúc"
             class="w-[250px] py-1 pr-2 border border-l_gray rounded"
-            v-model="results.selectDay2"
           />
         </div>
       </div>
@@ -701,7 +693,7 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-  <div class="click_tuy_chon_lich_su" v-if="history.hienThiTuyChon">
+  <div v-if="history.hienThiTuyChon" class="click_tuy_chon_lich_su">
     <div class="w-screen h-screen bg-black fixed top-0 opacity-70"></div>
     <div class="z-20 fixed top-[100px] left-1/3">
       <div class="py-3 bg-l_green text-center">
@@ -711,19 +703,19 @@ onMounted(async () => {
         <div class="my-5 ml-5 mr-2 text-l_gray">
           <p class="font-semibold pb-1">Chọn ngày bắt đầu:</p>
           <input
+            v-model="history.selectDay"
             type="date"
             placeholder="Nhập ngày bắt đầu"
             class="w-[250px] py-1 pl-2 border border-l_gray rounded"
-            v-model="history.selectDay"
           />
         </div>
         <div class="my-5 mr-5 ml-2 text-l_gray">
           <p class="font-semibold pb-1">Chọn ngày kết thúc:</p>
           <input
+            v-model="history.selectDay2"
             type="date"
             placeholder="Nhập ngày kết thúc"
             class="w-[250px] py-1 pr-2 border border-l_gray rounded"
-            v-model="history.selectDay2"
           />
         </div>
       </div>
@@ -747,14 +739,14 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-  <div class="nhap_sai_ngay_ket_qua z-50" v-if="results.nhapNgaySai">
+  <div v-if="results.nhapNgaySai" class="nhap_sai_ngay_ket_qua z-50">
     <div
       class="w-1/3 p-2 text-white bg-l_red rounded-full text-center fixed bottom-10 left-1/3"
     >
       <p>Ngày bắt đầu không thể lớn hơn ngày kết thúc</p>
     </div>
   </div>
-  <div class="nhap_sai_ngay_lich_su z-50" v-if="history.nhapNgaySai">
+  <div v-if="history.nhapNgaySai" class="nhap_sai_ngay_lich_su z-50">
     <div
       class="w-1/3 p-2 text-white bg-l_red rounded-full text-center fixed bottom-10 left-1/3"
     >
@@ -789,10 +781,10 @@ onMounted(async () => {
 
 .fieldset-nav {
   padding: 18px 30px 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
-    position: relative;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+  position: relative;
 }
 
 .clickBtn {

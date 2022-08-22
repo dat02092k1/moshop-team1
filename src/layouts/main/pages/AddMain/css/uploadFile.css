@@ -1,0 +1,27 @@
+.preview-image-list {
+    display: flex;
+}
+.preview-image-list img {
+    width: 100px;
+    height: 100px;
+    margin-right: 15px;
+    border-radius: 20px;
+}
+.btn-upload-file {
+    border: 1px dashed #069255;
+    border-radius: 20px;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    color: #069255;
+    cursor: pointer;
+}
+.btn-upload-file svg {
+    margin: 20px auto 5px;
+}
+.btn-upload-file:hover {
+    color: #fff;
+    background-color: #069255;
+    border: 1px dashed #fff;
+    transition: 0.3s;
+}
