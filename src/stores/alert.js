@@ -1,11 +1,13 @@
-import { defineStore } from 'pinia';
+import axios from "axios";
+import { defineStore } from "pinia";
+// import { useRouter, useRoute } from "vue-router";
+// const router = useRouter();
+import router from "../router/index.js";
 
-export const useAlertStore = defineStore({
-    id: "alert",
+export const useLoginStore = defineStore({
+    id: "au",
     state: () => ({
-        alert: null
+        user: [],
+        check: false,
     }),
-    actions: {
-        
-    }
-})
+};

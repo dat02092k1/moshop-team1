@@ -1,23 +1,8 @@
-<script setup>
-import { ref } from "vue";
-// import axios from "axios";
-import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
-import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
-import ProfileStaff from "./AddMain/ProfileStaff.vue";
-import JobInfomation from "./AddMain/JobInfomation.vue";
-
-// import { useAddMainStore } from "../../../stores/counter.js";
-// const store = useAddMainStore();
-const getListWorkPlace = ref([]);
-const refInfoForm = ref();
-function handleSaveData() {
-  refInfoForm.value.callValidateOnSubmit();
-}
-</script>
 <template>
-  <div class="grid grid-cols-1 mt-7">
+  {{ useStoreInAddMain.dataAddMain.tel }}
+  <div class="grid grid-cols-1 mt-5 mx-5">
     <div class="head flex justify-between">
-      <div class="head-back">
+      <RouterLink to="/staff/home" class="head-back">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-8 w-8"
@@ -32,30 +17,42 @@ function handleSaveData() {
             d="M15 19l-7-7 7-7"
           />
         </svg>
-      </div>
+      </RouterLink>
       <div class="head-action">
+        <button v-if="isRouter" class="btn-delete-user">Xoá</button>
         <button class="btn-head-action" @click="handleSaveData">Lưu</button>
-        <!--              <a-modal :visible="visible" title="Xác nhận đăng ký">-->
-        <!--                <span>-->
-        <!--                  <p>-->
-        <!--                    Mã OTP vừa được gửi đến số điện thoại quý khách đã đăng ký! Vui-->
-        <!--                    lòng nhập đúng mã OTP để hoàn thành.-->
-        <!--                  </p>-->
-        <!--                </span>-->
-        <!--                <span>-->
-        <!--                  <label for="">Mã OTP</label>-->
-        <!--                  <input class="block" type="text" placeholder="Nhập mã OTP" />-->
-        <!--                </span>-->
-        <!--                <span class="mt-4">-->
-        <!--                  <p>-->
-        <!--                    Lưu ý: Nếu bạn không nhận dược sms báo mã OTP, vui lòng thử lại-->
-        <!--                    hoặc mail về cskh@ghtk.vn để được hỗ trọ nhanh nhất!-->
-        <!--                  </p>-->
-        <!--                </span>-->
-        <!--              </a-modal>-->
+        <!--        modal-->
+        <div v-if="isRouterAdd">
+          <a-modal
+            :visible="visible"
+            class="pr-4"
+            title="Xác nhận đăng ký"
+            @ok="handleOk"
+          >
+            <p class="pl-4 mt-5">
+              {{ useStoreInAddMain.dataAddMain.confirmOtp }}
+              Mã OTP vừa được gửi đến số điện thoại quý khách đã đăng ký!
+              <br />
+              Vui lòng nhập đúng mã OTP để hoàn thành
+            </p>
+            <input
+
+              v-model="confirmOtp"
+              type="text"
+              class="border h-10 p-5 mx-6"
+              style="width: 90%"
+              placeholder="Nhập mã OTP"
+            />
+            <p class="mt-5 pl-4">
+              Lưu ý: Nếu bạn không nhận dược sms báo mã OTP, vui lòng thử lại
+              hoặc
+              <br />
+              mail về <u>cskh@ghtk.vn</u> để được hỗ trợ nhanh nhất!
+            </p>
+          </a-modal>
+        </div>
       </div>
     </div>
-    <!--    <HeadAction @emitSaveData = "handleEmitSaveData" />-->
     <div class="page__info">
       <fieldset class="bunker__info">
         <legend class="bunker-title">Thông tin</legend>
@@ -77,28 +74,31 @@ function handleSaveData() {
       <div class="page_jobInfomation md:col-span-2 lg:col-span-1 sm:col-span-2">
         <fieldset class="bunker__info">
           <legend class="bunker-title">Thông tin công việc</legend>
-          <JobInfomation :get-list-work-place="getListWorkPlace" />
+          <JobInfomation
+            ref="refJobInfomation"
+            :get-list-work-place="getListWorkPlace"
+          />
         </fieldset>
       </div>
       <div class="page_profileStaff md:col-span-2 lg:col-span-1 sm:col-span-2">
         <fieldset class="bunker__info">
           <legend class="bunker-title">Hồ sơ nhân viên</legend>
           <div class="profileStaff-item">
-            <div class="profileStaff-title">Chứng minh thư</div>
-            <div class="profileStaff-upload">
+            <div class="profileStaff-title mb-5">Chứng minh thư</div>
+            <div class="profileStaff-upload mb-5">
               <ProfileStaff />
             </div>
           </div>
           <div class="profileStaff-item">
-            <div class="profileStaff-title">Sơ yếu lý lịch</div>
-            <div class="profileStaff-upload">
-              <ProfileStaff />
+            <div class="profileStaff-title mb-5">Sơ yếu lý lịch</div>
+            <div class="profileStaff-upload mb-5">
+              <SoYeuLyLich />
             </div>
           </div>
           <div class="profileStaff-item">
-            <div class="profileStaff-title">Hồ sơ</div>
-            <div class="profileStaff-upload">
-              <ProfileStaff />
+            <div class="profileStaff-title mb-5">Hồ sơ</div>
+            <div class="profileStaff-upload mb-5">
+              <HopDongLaoDong />
             </div>
           </div>
         </fieldset>
@@ -106,6 +106,98 @@ function handleSaveData() {
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed, ref } from "vue";
+import axios from "axios";
+import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
+import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
+import ProfileStaff from "./AddMain/ProfileStaff.vue";
+import JobInfomation from "./AddMain/JobInfomation.vue";
+import { useRouter } from "vue-router";
+import { useAddMainStore } from "../../../stores/addMainStore.js";
+const useStoreInAddMain = useAddMainStore();
+// useStoreInAddMain;
+import TOKEN from "../../../service/AllApi";
+import SoYeuLyLich from "./AddMain/SoYeuLyLich.vue";
+import HopDongLaoDong from "./AddMain/HopDongLaoDong.vue";
+const confirmOtp = ref();
+// import { useAddMainStore } from "../../../stores/counter.js";
+// const store = useAddMainStore();
+const getListWorkPlace = ref([]);
+const refInfoForm = ref();
+const refJobInfomation = ref();
+
+const isRouter = computed(() => {
+  return useRouter().currentRoute.value.name === "staff.update";
+  // console.log(useRouter().currentRoute.value.name === "staff.update") ;
+});
+const isRouterAdd = computed(() => {
+  return useRouter().currentRoute.value.name === "satff.add";
+});
+// console.log(isRouter)
+// console.log(useStoreInAddMain)
+// const storeReq = useStoreInAddMain.dataAddMain;
+const visible = ref(false);
+async function handleOk() {
+  console.log(confirmOtp.value);
+  try {
+    const res = await axios.post(
+      "https://x.ghtk.vn/api/fulfilment/v2/staff/confirm/",
+      {
+        otp: confirmOtp.value,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      }
+    );
+    const resData = res.data.data;
+    console.log(resData);
+  } catch (error) {
+    console.log(error);
+  }
+
+  visible.value = false;
+}
+async function handleSaveData() {
+  const formData = new FormData();
+  formData.append("tel", useStoreInAddMain.dataAddMain.tel);
+  formData.append("avatar", useStoreInAddMain.dataAddMain.avatar);
+  formData.append("fullname", useStoreInAddMain.dataAddMain.fullname);
+  formData.append("birthday", useStoreInAddMain.dataAddMain.birthday);
+  formData.append("password", useStoreInAddMain.dataAddMain.password);
+  formData.append("live_address", useStoreInAddMain.dataAddMain.live_address);
+  formData.append(
+    "work_first_date",
+    useStoreInAddMain.dataAddMain.work_first_date
+  );
+  formData.append("work_address", useStoreInAddMain.dataAddMain.work_address);
+  formData.append("screens", useStoreInAddMain.dataAddMain.screens);
+  formData.append("pages", useStoreInAddMain.dataAddMain.pages);
+  try {
+    const res = await axios.post(
+      "http://x.ghtk.vn/api/v2/staff/create",
+      formData,
+      {
+        headers: {
+          Authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      }
+    );
+    console.log(res.data);
+    if (res.data.success === true) {
+      visible.value = true;
+    } else {
+      console.log(res.data.message);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+</script>
+
 <style scoped>
 .head-back svg {
   color: #069255;
@@ -158,5 +250,18 @@ legend.bunker-title {
 .profileStaff-title {
   font-weight: 500;
   margin-bottom: 5px;
+}
+.btn-delete-user {
+  color: #dc3545;
+  background-color: white;
+  padding: 7px 52px;
+  border: 2px solid #dc3545;
+  margin-right: 20px;
+  border-radius: 20px;
+  /*background-color: rgb(220, 53, 69);*/
+}
+.btn-delete-user:hover {
+  color: #fff;
+  background-color: #dc3545;
 }
 </style>

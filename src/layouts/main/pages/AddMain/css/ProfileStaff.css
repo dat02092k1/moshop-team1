@@ -1,0 +1,19 @@
+:deep(.ant-upload-select-picture-card i) {
+    font-size: 32px;
+    color: #069255;
+}
+
+:deep(.ant-upload-select-picture-card .ant-upload-text) {
+    margin-top: 8px;
+    color: #069255;
+}
+:deep(.ant-upload.ant-upload-select-picture-card) {
+    border-radius: 15px;
+}
+:deep(.ant-upload.ant-upload-select-picture-card):hover {
+    border: 1px dashed #069255;
+    border-radius: 15px;
+}
+:deep(.anticon svg) {
+    color: #069255;
+}

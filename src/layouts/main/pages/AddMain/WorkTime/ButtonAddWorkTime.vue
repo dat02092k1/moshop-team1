@@ -26,15 +26,5 @@ function handleClickAddWorkTime() {
 </script>
 
 <style scoped>
-.btn-add-time-job {
-  /*background-color: #069255;*/
-  color: #069255;
-  padding: 8px 22px;
-  border: 1px solid #069255;
-  border-radius: 4px;
-}
-.btn-add-time-job:hover {
-  background-color: #069255;
-  color: #fff;
-}
+@import "../css/ButtonAddWorkTime.css";
 </style>
