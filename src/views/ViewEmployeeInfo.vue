@@ -10,6 +10,7 @@ import {
 } from "../stores/ListEmployee.js";
 const route = useRoute();
 const id = route.params.id;
+
 const view = employeeStore();
 const results = resultEmployeeStore();
 const history = historyEmployeeStore();
@@ -582,8 +583,7 @@ onMounted(async () => {
             <div
               v-for="date in history.arrayDate[0]"
               v-if="history.isHistory == 0"
-              class="thoi_gian"
-            >
+            > 
               <p class="px-2 font-semibold text-[16px]">
                 {{ history.countDate(date) }} - {{ history.showDate(date) }}
               </p>
