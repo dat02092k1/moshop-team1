@@ -1,5 +1,5 @@
 <template>
-  {{ useStoreInScreenPage.dataAddMain.pages }}
+<!--  {{ useStoreInScreenPage.dataAddMain.pages }}-->
   <div class="heading-title">Màn hình được sử dụng</div>
   <div class="screen-item">
     <input
@@ -132,6 +132,9 @@ onMounted(async () => {
   width: 20px;
   height: 20px;
   border: 1px solid #069255;
+}
+.screen-item input:checked{
+  background-color: #069255;
 }
 .list-page {
   margin-left: 15px;

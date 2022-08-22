@@ -28,7 +28,7 @@
         show-search
         allow-clear
         placeholder="Chọn nơi làm việc"
-
+        style="width: 400px"
         :filter-option="filterAddress"
         @change="handleChangeAddress"
       >

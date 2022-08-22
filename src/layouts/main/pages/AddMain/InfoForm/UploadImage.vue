@@ -4,8 +4,8 @@
     <div class="avatar-preview">
       <img
         id="imagePreview"
-        src="https://moshop.com.vn/default-avatar.jpg"
-        alt="default_avatar"
+        :src="useStoreInUpload.dataAddMain.defaultAvatar"
+        alt=""
       />
       <input
         id="imageUpload"
