@@ -129,7 +129,7 @@ defineExpose({ handleGetValueCheckBox });
 input[type="checkbox"]:checked + label {
   background-color: #ff5d5d;
 }
-@import "../css/AddWorkTime.css";
+/*@import "../css/AddWorkTime.css";*/
 /*input[type="checkbox"] + label {*/
 /*  display: inline-block;*/
 /*  position: relative;*/
