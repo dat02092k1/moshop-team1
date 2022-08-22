@@ -4,7 +4,12 @@
       >Tùy chọn</a-button
     >
     <div class="modal-pop">
-      <a-modal v-model:visible="visible" class="" title="Tùy chọn hiển thị">
+      <a-modal
+        v-model:visible="visible"
+        class=""
+        title="Tùy chọn hiển thị"
+        :footer="null"
+      >
         <a-space direction="vertical" class="flex-row">
           <div class="date-pick ml-[80px]">
             <a-date-picker
@@ -22,7 +27,7 @@
           </div>
           <div></div>
         </a-space>
-        <div class="text-center ml-[125px]">
+        <div class="text-center ml-[125px] p-[5px]">
           <div
             @click="$emit('changeDrop')"
             class="text-center bg-[#069255] my-2 p-2 w-[50%] text-[14px] text-white"
@@ -52,7 +57,6 @@
 
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
-import SelectDate from "./SelectDate.vue";
 import { useStaffStore } from "../../../stores/store";
 export default defineComponent({
   setup() {
@@ -102,7 +106,7 @@ export default defineComponent({
       vanue2,
       showModal,
       handleOk,
-      SelectDate,
+      
       change1,
       change2,
       checkDate,

@@ -11,13 +11,16 @@
     <div>
       <div class="w-full flex justify-center" v-if="loginFunc.check">
         <div class="bg-red-500 text-white p-3 w-[350px] rounded-[10px]">
-            <span>Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui lòng thử lại!</span>
+          <span
+            >Thông tin tài khoản không đúng hoặc chưa được kích hoạt, bạn vui
+            lòng thử lại!</span
+          >
         </div>
       </div>
       <div class="login-section grid grid-cols-1 mt-6">
         <p class="section-header">Đăng Nhập</p>
         <div class="section-form">
-          <form action="" class="grid grid-cols-1">
+          <form action="" class="grid grid-cols-1" @change="validate()">
             <div class="field-item grid grid-cols-1">
               <label class="field-title" for="username"
                 >Số điện thoại hoặc email</label
@@ -28,6 +31,11 @@
                 autofocus
                 placeholder="Nhập tên cửa hàng"
               />
+              <span v-if="checkIp === false">
+                <p class="text-red-500">
+                  Số điện thoại hoặc email sai định dạng
+                </p>
+              </span>
             </div>
             <div class="field-item grid grid-cols-1">
               <label class="field-title" for="password">Mật Khẩu</label>
@@ -56,29 +64,47 @@ import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import { useLoginStore } from "../../stores/counter.js";
 import { useStaffStore } from "../../stores/store.js";
-const username = ref("hncp7@gmail.com");
-const password = ref("Reset0103");
+const username = ref("");
+const password = ref("");
 const router = useRouter();
 const loginFunc = useLoginStore();
 const loadStaff = useStaffStore();
 import { format, isToday } from "date-fns";
 const currentDate = new Date();
 const today = format(currentDate, "yyyy-MM-dd");
+const checkIp = ref(true);
+const isNumberPhone = (value) => {
+  return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(
+    value
+  );
+};
+const isEmail = (value) => {
+  return /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/.test(
+    value
+  );
+};
 console.log(loginFunc.check);
-async function loginHandle() {
-  // const res = await axios.post("https://x.ghtk.vn/api/fulfilment/auth/login", {
-  //   username: this.username,
-  //   password: this.password,
-  // });
-  // if (res.status === 200) {
-  //   localStorage.setItem("acessToken", res.data.data.access_token);
-  //   console.log(res.data.data);
-  //   router.push("/staff/home");
 
+async function loginHandle() {
+  // if (!isEmail(username.value)) {
+  //   console.log("error");
+  //   checkIp.value = false;
+  //   setTimeout(() => (checkIp.value = true), 3000);
+  // } else {
+  //   console.log(username.value);
+  //   loadStaff.getStaff(today, today);
+  //   loginFunc.getLogin(username.value, password.value);
   // }
-  console.log(username.value);
-  loadStaff.getStaff(today, today);
-  loginFunc.getLogin(username.value, password.value);
+  if (isEmail(username.value) || isNumberPhone(username.value)) {
+    console.log(username.value);
+    loadStaff.getStaff(today, today);
+    loginFunc.getLogin(username.value, password.value);
+  } else {
+    console.log("error ip");
+    checkIp.value = false;
+    setTimeout(() => (checkIp.value = true), 3000);
+  }
+
   // setInterval((() => {console.log(loginFunc.user.id);}), 5000)
 }
 
@@ -88,21 +114,9 @@ defineExpose({
   showPassword: false,
   password: null,
 });
-// computed()
-// function toggleShow() {
-//     return this.showPassword ? "Hide" : "Show";
-//   }
-// computed{
-//   buttonShowHide() {
-//     return this.showPassword ? "Hide" : "Show";
-//   },
-//   toggleShow() {
-//     this.showPassword = !this.showPassword;
-//   },
-// });
+
 </script>
 <style scoped>
-
 ::placeholder {
   opacity: 0.4;
 }
@@ -132,7 +146,7 @@ defineExpose({
 .section-form {
   padding: 15px;
 }
- 
+
 .field-title {
   font-size: 14px;
   font-weight: 700;

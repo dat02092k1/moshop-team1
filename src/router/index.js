@@ -51,7 +51,7 @@ const router = createRouter({
       component: AddMain,
     },
     {
-      path: "/staff/:id",
+      path: "/staff/view/:id",
       name: "staff.view",
       component: ViewEmployeeInfo,
     },
@@ -63,4 +63,5 @@ const router = createRouter({
   ],
 });
 
+ 
 export default router;

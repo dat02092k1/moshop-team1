@@ -12,57 +12,89 @@
           </div>
 
           <div>
-            <ul class="flex">
+            <ul class="hidden md:flex">
               <li class="flex">
                 <div
                   class="line w-[2px] h-[35px] bg-white text-white mt-3 mb-3 mr-3"
                 ></div>
                 <!-- <a class="font-bold text-[17px] text-white mr-3" href=""
                   >hncp7@gmail.com</a> -->
-                <DropDown/>
-                 
+                <DropDown />
               </li>
 
               <li class="ml-5">
                 <a href="" class="tooltip text-[20px] text-white">
-                  <i class="fa-solid fa-chart-simple font-bold text-[20px]"></i
-                  >Báo Cáo
-                  <span class="tooltiptext text-[12px]">Báo cáo</span></a
+                  <i class="fa-solid fa-chart-simple font-bold text-[20px]"></i>
+                  Báo cáo
+                  <span class="tooltiptext text-[12px]"
+                    ><p class="text-white left-[27px] top-[-18px] absolute">
+                      Báo cáo
+                    </p></span
+                  ></a
                 >
               </li>
 
               <li class="ml-5">
-                <a href="" class="text-[20px] text-white">
+                <a href="" class="tooltip text-[20px] text-white">
                   <i class="fa-regular fa-user-group font-bold text-[20px]"></i>
                   Khách Hàng
+                  <span class="tooltiptext text-[12px]"
+                    ><p class="text-white left-[27px] top-[-18px] absolute">
+                      Khách Hàng
+                    </p></span
+                  >
                 </a>
               </li>
 
               <li class="ml-5">
-                <a href="" class="text-[20px] text-white">
+                <a href="" class="tooltip text-[20px] text-white">
                   <i
                     class="fa-regular fa-comment font-bold text-[20px] text-white"
                   ></i>
                   Chats
+                  <span class="tooltiptext text-[12px]"
+                    ><p class="text-white left-[27px] top-[-18px] absolute">
+                      Chats
+                    </p></span
+                  >
                 </a>
               </li>
 
               <li class="ml-5">
-                <a href="" class="text-[20px] text-white">
+                <a href="" class="tooltip text-[20px] text-white">
                   <i
                     class="fa-regular fa-video font-bold text-[20px] text-white"
                   ></i>
                   Lives
+                  <span class="tooltiptext text-[12px]"
+                    ><p class="text-white left-[27px] top-[-18px] absolute">
+                      Lives
+                    </p></span
+                  >
                 </a>
               </li>
 
-              <li @click="isActive()" class="ml-5 bg-white  ">
-                <a href="" class="text-[20px] px-2 text-green-500">
+              <li @click="isActive()" class="ml-5 bg-white">
+                <!-- <a href="" class="text-[20px] px-2 text-green-500">
                   <i
                     class="fa-regular fa-people-group font-bold text-[20px]"
                   ></i>
                   Nhân viên
-                </a>
+                </a> -->
+                <router-link
+                  class="tooltip text-[20px] px-2 text-green-500"
+                  to="/staff/home"
+                >
+                  <i
+                    class="fa-regular fa-people-group font-bold text-[20px]"
+                  ></i>
+                  Nhân viên
+                  <span class="tooltiptext text-[12px]"
+                    ><p class="text-white left-[27px] top-[-18px] absolute">
+                      Nhân viên
+                    </p></span
+                  >
+                </router-link>
               </li>
 
               <li class="ml-5">
@@ -73,7 +105,7 @@
                   Đơn Hàng
                 </a>
               </li>
-
+   
               <li class="ml-5 bg-[#da4838] px-2">
                 <a class="text-[20px] text-white">
                   <i class="fa-regular fa-circle-up"></i>
@@ -89,7 +121,7 @@
 </template>
 
 <script setup>
-import DropDown from './navbar/DropDown.vue';
+import DropDown from "./navbar/DropDown.vue";
 let active = false;
 function isActive() {
   active = true;
@@ -112,7 +144,7 @@ function isActive() {
   text-align: center;
   border-radius: 6px;
   padding: 0px 0;
-  
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;

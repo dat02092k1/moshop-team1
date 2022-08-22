@@ -49,7 +49,7 @@
             title="Cài đặt KPIs nhân viên"
             @ok="handleOk"
             class="modalKpi"
-            :footer	="null"
+            :footer="null"
           >
             <div class="setting bg-[#d6d6d6] p-3">
               <h2>Phân công Nhân Viên Chat</h2>
@@ -76,7 +76,7 @@
             </div>
 
             <div class="setting-off p-3">
-              <h3>NV Offline {{ OffKpi }}</h3>
+              <h3>NV Offline</h3>
               <a-radio-group v-if="OnKpi !== 'all'" v-model:value="OffKpi">
                 <a-radio :style="radioStyleOff" :value="KPImessage[5].value"
                   >Tiếp tục hội thoại sau khi Offline</a-radio
@@ -86,8 +86,13 @@
                 >
               </a-radio-group>
             </div>
-            <div class="mt-4 flex justify-center pb-2 ">
-              <button @click="postKpi()" class="bg-[#069255] p-3 w-full rounded text-white text-[18px] font-bold mx-[20px]">Lưu</button>
+            <div class="mt-4 flex justify-center pb-2">
+              <button
+                @click="postKpi()"
+                class="bg-[#069255] p-3 w-full rounded text-white text-[18px] font-bold mx-[20px]"
+              >
+                Lưu
+              </button>
             </div>
           </a-modal>
           <button class="btn-action" @click="showModalKpi">
@@ -141,7 +146,7 @@
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="py-3 px-6">Nhân viên</th>
+            <th scope="col" class="py-3 px-6 text-center">Nhân viên</th>
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">KH tương tác</div>
               <div class="head-sort flex">
@@ -557,7 +562,7 @@
             v-for="staff_item in staff_items.staff"
             :key="staff_item.id"
           >
-            <td>
+            <td class="w-[25%]">
               <StaffOnly :staffAll="staff_items.staff" :staff="staff_item" />
             </td>
             <!-- <td><img :src="staff_item.avatar"  class="w-[64px] h-[64px rounded-[50%]" alt="" /></td> -->
@@ -582,10 +587,8 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import { useStaffStore } from "../../../stores/store.js";
-import TableStaff from "./TableStaff.vue";
 import StaffOnly from "./StaffOnly.vue";
 import PickDate from "./PickDate.vue";
-import SelectDate from "./SelectDate.vue";
 import axios from "axios";
 import { useWeekTable } from "../../../stores/counter";
 import {
@@ -932,14 +935,12 @@ defineExpose({
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;  
+  background: #f1f1f1;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #bdbdbd; 
+  background: #bdbdbd;
   border-radius: 15px;
 }
 </style>
-
-
