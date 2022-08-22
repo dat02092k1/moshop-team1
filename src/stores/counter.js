@@ -19,15 +19,7 @@ export const useLoginStore = defineStore({
         })
         .then((res) => {
           this.user = res.data.data;
-          console.log(res);
-          // console.log(this.user.shop.token);
-          // if (res.status === 200) {
-          //   console.log('save token');
-          //   localStorage.setItem("acessToken", res.data.data.access_token);
-          //   localStorage.setItem("userId", this.user.shop.id);
-          //   router.push("/staff/home");
-          //   localStorage.removeItem("user");
-          // }
+          console.log(res);  
           if (res.data.success === false) {
             console.log("error");
             this.check = true;

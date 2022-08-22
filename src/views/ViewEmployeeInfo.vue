@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import {useRoute} from "vue-router"
+import { useRoute } from "vue-router";
 import {
   employeeStore,
   resultEmployeeStore,
@@ -8,9 +8,9 @@ import {
   listAddressStore,
   listPageStore,
 } from "../stores/ListEmployee.js";
-const route = useRoute()
+const route = useRoute();
 
-const id = route.params.id
+const id = route.params.id;
 
 const view = employeeStore();
 const results = resultEmployeeStore();
@@ -197,9 +197,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="ket_qua_cong_viec my-10">
-      <fieldset
-        class="fieldset-nav"
-      >
+      <fieldset class="fieldset-nav">
         <legend
           class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
         >
@@ -305,9 +303,7 @@ onMounted(async () => {
     </div>
     <div class="pb-[50px] grid lg:grid-cols-2 sm:grid-cols-1 gap-10">
       <div class="thong_tin_cong_viec">
-        <fieldset
-          class="fieldset-nav "
-        >
+        <fieldset class="fieldset-nav">
           <legend
             class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
@@ -545,15 +541,13 @@ onMounted(async () => {
         </fieldset>
       </div>
       <div class="lich_su_hoat_dong">
-        <fieldset
-          class="fieldset-nav "
-        >
+        <fieldset class="fieldset-nav">
           <legend
             class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
             Lịch sử hoạt động
           </legend>
-          <div class="mx-4 mt-5 flex ">
+          <div class="mx-4 mt-5 flex">
             <button
               class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
               :class="{ clickBtn: history.isGreen == 1 }"
@@ -591,7 +585,7 @@ onMounted(async () => {
               class="thoi_gian"
               v-for="date in history.arrayDate[0]"
               v-if="history.isHistory == 0"
-            > 
+            >
               <p class="px-2 font-semibold text-[16px]">
                 {{ history.countDate(date) }} - {{ history.showDate(date) }}
               </p>
@@ -789,10 +783,10 @@ onMounted(async () => {
 
 .fieldset-nav {
   padding: 18px 30px 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
-    position: relative;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+  position: relative;
 }
 
 .clickBtn {
