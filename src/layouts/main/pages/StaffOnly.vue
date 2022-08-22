@@ -1,6 +1,6 @@
 <template>
   <div class="m-3">
-    <div class="staff-info grid grid-cols-3">
+    <div class="staff-info grid grid-cols-1 md:grid-cols-3">
       <div class="staff-left ml-3 mr-3">
         <div class="staff-avt">
           <img
@@ -145,7 +145,6 @@ async function setStatus(shop_user_id, status) {
   getStatus.changeStatus(shop_user_id, status);
   getStatus.clearStaff();
   await getStatus.getStaff(today, today);
-  console.log(today);
 }
 const isSeen = ref(false);
 </script>

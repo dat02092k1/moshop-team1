@@ -49,7 +49,7 @@
             title="Cài đặt KPIs nhân viên"
             @ok="handleOk"
             class="modalKpi"
-            :footer	="null"
+            :footer="null"
           >
             <div class="setting bg-[#d6d6d6] p-3">
               <h2>Phân công Nhân Viên Chat</h2>
@@ -86,8 +86,13 @@
                 >
               </a-radio-group>
             </div>
-            <div class="mt-4 flex justify-center pb-2 ">
-              <button @click="postKpi()" class="bg-[#069255] p-3 w-full rounded text-white text-[18px] font-bold mx-[20px]">Lưu</button>
+            <div class="mt-4 flex justify-center pb-2">
+              <button
+                @click="postKpi()"
+                class="bg-[#069255] p-3 w-full rounded text-white text-[18px] font-bold mx-[20px]"
+              >
+                Lưu
+              </button>
             </div>
           </a-modal>
           <button class="btn-action" @click="showModalKpi">
@@ -141,7 +146,7 @@
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="py-3 px-6">Nhân viên</th>
+            <th scope="col" class="py-3 px-6 text-center">Nhân viên</th>
             <th scope="col" class="py-3 px-6 relative">
               <div class="head-name">KH tương tác</div>
               <div class="head-sort flex">
@@ -557,7 +562,7 @@
             v-for="staff_item in staff_items.staff"
             :key="staff_item.id"
           >
-            <td>
+            <td class="w-[25%]">
               <StaffOnly :staffAll="staff_items.staff" :staff="staff_item" />
             </td>
             <!-- <td><img :src="staff_item.avatar"  class="w-[64px] h-[64px rounded-[50%]" alt="" /></td> -->
@@ -930,14 +935,12 @@ defineExpose({
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;  
+  background: #f1f1f1;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #bdbdbd; 
+  background: #bdbdbd;
   border-radius: 15px;
 }
 </style>
-
-
