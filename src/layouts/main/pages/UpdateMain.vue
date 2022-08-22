@@ -1,124 +1,46 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import UploadImage from "./AddMain/InfoForm/UploadImage.vue";
-import InfoForm from "./AddMain/InfoForm/InfoForm.vue";
-import ProfileStaff from "./AddMain/ProfileStaff.vue";
-import JobInfomation from "./AddMain/JobInfomation.vue";
 import TOKEN from "../../../service/AllApi.js";
-const visible = ref(false);
-const dataInfoUserUpdate = ref([]);
-const showModal = () => {
-  visible.value = true;
-};
-
-const idUserUpdate = "157836bb-95d7-49a6-b221-3c339615fa50";
-// const API_GET_USER = `https://x.ghtk.vn/api/v2/staff/detail?shop_user_id=157836bb-95d7-49a6-b221-3c339615fa50`;
+import AddMain from "./AddMain.vue";
+import { useRoute } from "vue-router";
+import { useAddMainStore } from "../../../stores/addMainStore.js";
+const useStoreInUpdate = useAddMainStore();
+const route = useRoute();
+const idUpdate = route.params.id;
+useStoreInUpdate.dataAddMain.current_id_user = idUpdate;
+// console.log("id", idUpdate)
+let userStore = useStoreInUpdate.dataAddMain;
 onMounted(async () => {
   try {
     const res = await axios.get(
-      `https://x.ghtk.vn/api/v2/staff/detail?shop_user_id=${idUserUpdate}`,
+      `https://x.ghtk.vn/api/v2/staff/detail?shop_user_id=${idUpdate}`,
       {
         headers: {
           Authorization: "Bearer " + TOKEN.TOKEN,
         },
       }
     );
-    dataInfoUserUpdate.value = res.data.data;
-    // console.log(res.data.data);
+    const resData = res.data.data;
+    console.log(resData);
+    // userStore = resData;
+    // console.log("userStore",userStore)
+
+    userStore.birthday = resData.birthday;
+    userStore.fullname = resData.fullname;
+    userStore.tel = resData.tel;
+    userStore.avatar = resData.avatar;
+    userStore.live_address = resData.live_address;
+    userStore.work_first_date = resData.work_first_date;
+    userStore.work_address = resData.work_address;
+    userStore.screens = resData.screens;
   } catch (error) {
     console.log(error);
   }
 });
 </script>
 <template>
-  <div class="grid grid-cols-1">
-    <div class="head flex justify-between">
-      <div class="head-back">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-8 w-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="3"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </div>
-      <div class="head-action">
-        <button class="btn-head-action" @click="showModal()">Lưu</button>
-        <a-modal :visible="visible" title="Xác nhận đăng ký">
-          <span>
-            <p>
-              Mã OTP vừa được gửi đến số điện thoại quý khách đã đăng ký! Vui
-              lòng nhập đúng mã OTP để hoàn thành.
-            </p>
-          </span>
-          <span>
-            <label for="">Mã OTP</label>
-            <input class="block" type="text" placeholder="Nhập mã OTP" />
-          </span>
-          <span class="mt-4">
-            <p>
-              Lưu ý: Nếu bạn không nhận dược sms báo mã OTP, vui lòng thử lại
-              hoặc mail về cskh@ghtk.vn để được hỗ trọ nhanh nhất!
-            </p>
-          </span>
-        </a-modal>
-      </div>
-    </div>
-    <div class="page__info">
-      <fieldset class="bunker__info">
-        <legend class="bunker-title">Thông tin</legend>
-        <div class="grid sm:grid-cols-12">
-          <div class="avatar col-span-3 inline-block align-top">
-            <UploadImage />
-          </div>
-          <div class="col-span-9">
-            <div class="info_form">
-              <InfoForm />
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-    <div class="grid md:grid-cols-12 gap-x-5 flex mt-10">
-      <div class="page_jobInfomation col-span-6">
-        <fieldset class="bunker__info">
-          <legend class="bunker-title">Thông tin công việc</legend>
-          <JobInfomation :dataInfoUserUpdate="dataInfoUserUpdate" />
-        </fieldset>
-      </div>
-      <div class="page_profileStaff col-span-6">
-        <fieldset class="bunker__info">
-          <legend class="bunker-title">Hồ sơ nhân viên</legend>
-          <div class="profileStaff-item">
-            <div class="profileStaff-title">Chứng minh thư</div>
-            <div class="profileStaff-upload">
-              <ProfileStaff />
-            </div>
-          </div>
-          <div class="profileStaff-item">
-            <div class="profileStaff-title">Sơ yếu lý lịch</div>
-            <div class="profileStaff-upload">
-              <ProfileStaff />
-            </div>
-          </div>
-          <div class="profileStaff-item">
-            <div class="profileStaff-title">Hồ sơ</div>
-            <div class="profileStaff-upload">
-              <ProfileStaff />
-            </div>
-          </div>
-        </fieldset>
-      </div>
-    </div>
-  </div>
+  <AddMain />
 </template>
 <style scoped>
 .head-back svg {

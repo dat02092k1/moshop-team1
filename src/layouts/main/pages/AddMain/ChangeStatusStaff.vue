@@ -1,29 +1,97 @@
 <template>
-  <div>Change status staff</div>
+  <div class="flex">
+    <p class="title-status">Trạng thái</p>
+    <select id="change-status"  @change="getValueStatus">
+      <option value="1">Đang làm việc</option>
+      <option value="0">Nghỉ tạm thời</option>
+      <option value="2">Đã nghỉ việc</option>
+    </select>
+  </div>
 </template>
-
 <script setup>
+import { ref } from "vue";
 import axios from "axios";
-import { onMounted } from "vue";
-import TOKEN from "../../../../service/AllApi";
-const api_change_status_staff =
-  "https://x.ghtk.vn/api/fulfilment/v1/shops/get-pick-addresses";
-onMounted(async () => {
-  try {
-    const list = await axios.get(api_change_status_staff, {
-      headers: {
-        Authorization: "Bearer " + TOKEN.TOKEN,
-      },
-    {
-      body:{
 
-      }
-    }
-    });
-  } catch (error) {
-    console.log(error);
+import TOKEN from "../../../../service/AllApi.js";
+
+import { useAddMainStore } from "../../../../stores/addMainStore";
+const statusRef = ref();
+const shop_user_id = useAddMainStore().dataAddMain.current_id_user;
+
+const select = document.getElementById("change-status");
+// console.log(select.value)
+async function getValueStatus(e) {
+  console.log("sdsd", e.target.value);
+  const value = e.target.value;
+  if (value === 1) {
+    statusRef.value.style.border = "3px solid #28a745";
   }
-});
-</script>
+  if (value === 0) {
+    statusRef.value.style.borderColor = "#28a745";
+  }
+  if (value === 2) {
+    statusRef.value.style.borderColor = "#dc3545";
+  }
 
-<style scoped></style>
+  await axios
+    .post(
+      "https://x.ghtk.vn/api/v2/staff/set-status",
+      {
+        shop_user_id: shop_user_id,
+        status: value,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + TOKEN.TOKEN,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res.data)
+    });
+}
+</script>
+<!--<template>-->
+<!--  <div>Change status staff</div>-->
+<!--</template>-->
+
+<!--<script setup>-->
+<!--import axios from "axios";-->
+<!--import { onMounted } from "vue";-->
+<!--import TOKEN from "../../../../service/AllApi";-->
+<!--const api_change_status_staff =-->
+<!--  "https://x.ghtk.vn/api/fulfilment/v1/shops/get-pick-addresses";-->
+<!--onMounted(async () => {-->
+<!--  try {-->
+<!--    const list = await axios.get(api_change_status_staff, {-->
+<!--      headers: {-->
+<!--        Authorization: "Bearer " + TOKEN.TOKEN,-->
+<!--      },-->
+<!--    {-->
+<!--      body:{-->
+
+<!--      }-->
+<!--    }-->
+<!--    });-->
+<!--  } catch (error) {-->
+<!--    console.log(error);-->
+<!--  }-->
+<!--});-->
+<!--</script>-->
+
+<style scoped>
+.title-status {
+  font-weight: 400;
+  margin-right: 33%;
+}
+#change-status {
+  border: 3px solid black;
+  height: 30px;
+  width: 200px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+}
+#change-status:focus {
+  outline: none;
+}
+</style>

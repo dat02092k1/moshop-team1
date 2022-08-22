@@ -1,47 +1,90 @@
-<script>
-import { ref, onMounted } from "vue";
+<script setup>
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import {
+  employeeStore,
+  resultEmployeeStore,
+  historyEmployeeStore,
+  listAddressStore,
+  listPageStore,
+} from "../stores/ListEmployee.js";
+const route = useRoute();
+const id = route.params.id;
+const view = employeeStore();
+const results = resultEmployeeStore();
+const history = historyEmployeeStore();
+const addresses = listAddressStore();
+const page = listPageStore();
 
-// const listEmployee = EmployeeStore();
+onMounted(async () => {
+  await view.getEmployee(id);
+  await results.getResultEmployee(id);
+  await history.getHistory(id);
+  await addresses.getAddress();
+  await page.getPage();
+  await view.checkIsPage();
 
-// onMounted(() => {
-//   listEmployee.getEmployee();
-// });
+  const data = addresses.address;
+  const temp = view.employees.work_address;
+  // địa chỉ công ty
+  data.map((state) => {
+    if (state.id == temp) {
+      addresses.x = state.address;
+    }
+  });
+  //  kiểm tra màn hình được quyền sử dụng
+  view.employees.screens.map((state) => {
+    if (state === "order") {
+      view.screen.order = !view.screen.order;
+    }
+    if (state === "chat_ops") {
+      view.screen.chat_ops = !view.screen.chat_ops;
+    }
+    if (state === "statistic") {
+      view.screen.statistic = !view.screen.statistic;
+    }
+    if (state === "customer") {
+      view.screen.customer = !view.screen.customer;
+    }
+    if (state === "staff") {
+      view.screen.staff = !view.screen.staff;
+    }
+    if (state === "sale") {
+      view.screen.sale = !view.screen.sale;
+    }
+    if (state === "product") {
+      view.screen.products = !view.screen.products;
+    }
+  });
 
-export default {
-  data() {
-    return {
-      trangthai: "3",
-      anHienTrangThai: false,
-      thongBaoThayDoi: false,
-      hienThiTuyChon: false,
-    };
-  },
-  created() {},
-  methods: {
-    // Thay đổi trạng thái hoạt động
-    clickTrangThai() {
-      this.anHienTrangThai = !this.anHienTrangThai;
-    },
-    thayDoiTrangThai(a) {
-      this.trangthai = a;
-      this.anHienTrangThai = !this.anHienTrangThai;
-      this.thongBaoThayDoi = !this.thongBaoThayDoi;
-      setTimeout(() => {
-        this.thongBaoThayDoi = !this.thongBaoThayDoi;
-      }, 1500);
-    },
-    // PopUp tùy chọn
-    clickTuyChon() {
-      this.hienThiTuyChon = !this.hienThiTuyChon;
-    },
-    clickXacNhanTuyChon() {
-      this.hienThiTuyChon = !this.hienThiTuyChon;
-    },
-    clickHuyBoTuyChon() {
-      this.hienThiTuyChon = !this.hienThiTuyChon;
-    },
-  },
-};
+  // hiển thị thời gian đăng kí làm việc
+  view.employees.work_time_repeats.map((state) => {
+    state.repeats.map((state2) => {
+      if (state2 == 0) {
+        view.time_work.t2 = true;
+      }
+      if (state2 == 1) {
+        view.time_work.t3 = true;
+      }
+      if (state2 == 2) {
+        view.time_work.t4 = true;
+      }
+      if (state2 == 3) {
+        view.time_work.t5 = true;
+      }
+      if (state2 == 4) {
+        view.time_work.t6 = true;
+      }
+      if (state2 == 5) {
+        view.time_work.t7 = true;
+      }
+      if (state2 == 6) {
+        view.time_work.cn = true;
+      }
+      return;
+    });
+  });
+});
 </script>
 <template>
   <div class="m-5">
@@ -55,54 +98,60 @@ export default {
       <div>
         <div class="avt_employee flex justify-center">
           <img
-            src=""
+            :src="view.employees.avatar"
             alt="avt"
             class="w-[128px] h-[128px] border-0 border-red rounded-full"
           />
         </div>
-        <div class="py-2 font-bold text-xl">
-          <span class="name_employee">HuongCM</span>
+        <div class="py-2 font-bold text-xl flex justify-center">
+          <span class="name_employee pr-2">{{ view.employees.fullname }}</span>
           <span> / </span>
-          <span class="phone_employee">84902046214</span>
+          <span class="phone_employee pl-2">{{ view.employees.tel }}</span>
         </div>
         <div class="flex items-center">
-          <span class="font-semibold">Trạng thái</span>
-          <div>
+          <span class="font-bold">Trạng thái</span>
+          <div class="font-semibold">
             <button
-              v-if="trangthai == 1"
+              v-if="view.employees.active == 0"
               class="mx-5 px-5 py-1 text-l_green border border-l_green rounded-full"
-              @click="clickTrangThai()"
+              @click="view.clickTrangThai()"
             >
               <span>Đang làm việc</span>
-              <a class="pl-2"><i class="fa-solid fa-angle-down"></i></a>
+              <a class="pl-2 text-l_green"
+                ><i class="fa-solid fa-angle-down"></i
+              ></a>
             </button>
             <button
-              v-else-if="trangthai == 2"
+              v-else-if="view.employees.active == 1"
               class="mx-5 px-5 py-1 text-l_orange border border-l_orange rounded-full"
-              @click="clickTrangThai()"
+              @click="view.clickTrangThai()"
             >
               <span>Nghỉ tạm thời</span>
-              <a class="pl-2"><i class="fa-solid fa-angle-down"></i></a>
+              <a class="pl-2 text-l_orange"
+                ><i class="fa-solid fa-angle-down"></i
+              ></a>
             </button>
             <button
               v-else
               class="mx-5 px-5 py-1 text-l_red border border-l_red rounded-full"
-              @click="clickTrangThai()"
+              @click="view.clickTrangThai()"
             >
               <span>Đã nghỉ việc</span>
-              <a class="pl-2"><i class="fa-solid fa-angle-down"></i></a>
+              <a class="pl-2 text-l_red"
+                ><i class="fa-solid fa-angle-down"></i
+              ></a>
             </button>
           </div>
         </div>
         <div
-          v-if="anHienTrangThai"
+          v-if="view.anHienTrangThai"
           class="z-10 p-5 text-[16px] font-semibold bg-white fixed top-[160px] left-[570px] border-2 border-l_grey rounded-[14px] shadow-lg"
         >
           <table>
-            <tr class="h-[40px]" @click="thayDoiTrangThai(1)">
+            <tr class="h-[40px]" @click="view.thayDoiTrangThai(0, id)">
               <td>
                 <img
-                  v-if="trangthai == 1"
+                  v-if="view.employees.active == 0"
                   src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
                   alt=""
                   class="mr-3"
@@ -110,10 +159,10 @@ export default {
               </td>
               <td>Đang làm việc</td>
             </tr>
-            <tr class="h-[40px]" @click="thayDoiTrangThai(2)">
+            <tr class="h-[40px]" @click="view.thayDoiTrangThai(1, id)">
               <td>
                 <img
-                  v-if="trangthai == 2"
+                  v-if="view.employees.active == 1"
                   src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
                   alt=""
                   class="mr-3"
@@ -121,10 +170,10 @@ export default {
               </td>
               <td>Nghỉ việc tạm thời</td>
             </tr>
-            <tr class="h-[40px]" @click="thayDoiTrangThai(3)">
+            <tr class="h-[40px]" @click="view.thayDoiTrangThai(2, id)">
               <td>
                 <img
-                  v-if="trangthai == 3"
+                  v-if="view.employees.active == 2"
                   src="https://moshop.com.vn/_nuxt/img/check-circle-green.af1a7f4.svg"
                   alt=""
                   class="mr-3"
@@ -136,46 +185,53 @@ export default {
         </div>
       </div>
       <div class="py-5">
-        <a href="">
+        <RouterLink :to="{ path: '/staff/update/' + id }">
           <button
             class="px-[52px] py-[6px] border-2 text-l_cyan border-l_green rounded-full hover:bg-l_cyan hover:text-white transition ease-in-out"
           >
             Sửa
           </button>
-        </a>
+        </RouterLink>
       </div>
     </div>
     <div class="ket_qua_cong_viec my-10">
-      <fieldset class="border-2 border-l_grey rounded-[18px] shadow-md">
+      <fieldset class="fieldset-nav">
         <legend
-          class="mx-10 px-[20px] py-[6px] font-semibold text-[16px] border"
+          class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
         >
           Kết quả công việc
         </legend>
         <div class="mx-10 my-5">
           <button
-            class="mr-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            class="mr-5 mb-2 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            :class="{ clickBtn: results.isGreenSelect == 1 }"
+            @click="results.clickBtnDay(1)"
           >
             Hôm nay
           </button>
           <button
-            class="mr-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            class="mr-5 mb-2 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            :class="{ clickBtn: results.isGreenSelect == 2 }"
+            @click="results.clickBtnWeek(2, id)"
           >
             Tuần này
           </button>
           <button
-            class="mr-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            class="mr-5 mb-2 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            :class="{ clickBtn: results.isGreenSelect == 3 }"
+            @click="results.clickBtnMonth(3, id)"
           >
             Tháng này
           </button>
           <button
-            class="mr-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
-            @click="clickTuyChon"
+            class="mr-5 mb-2 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+            :class="{ clickBtn: results.isGreenSelect == 4 }"
+            @click="results.clickTuyChon(1)"
           >
             Tùy chọn
           </button>
         </div>
-        <div class="mx-10 my-8 text-[14px]">
+        <div class="mx-10 my-8 text-[14px] overflow-x-auto scroll-bar-x">
           <table class="w-full">
             <thead>
               <th class="w-8% py-[12px] border-[1px] border-l_grey">
@@ -208,141 +264,274 @@ export default {
               </th>
             </thead>
             <tbody class="text-center">
-              <td class="py-[12px] border-[1px] border-l_grey">1</td>
-              <td class="py-[12px] border-[1px] border-l_grey">2</td>
-              <td class="py-[12px] border-[1px] border-l_grey">3</td>
-              <td class="py-[12px] border-[1px] border-l_grey">4</td>
-              <td class="py-[12px] border-[1px] border-l_grey">5</td>
-              <td class="py-[12px] border-[1px] border-l_grey">6</td>
-              <td class="py-[12px] border-[1px] border-l_grey">7</td>
-              <td class="py-[12px] border-[1px] border-l_grey">8</td>
-              <td class="py-[12px] border-[1px] border-l_grey">9</td>
-              <td class="py-[12px] border-[1px] border-l_grey">10</td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.customer }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.customer_has_phone }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.call_log }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.total_order }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.rate_order }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.order_success }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.order_return }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.revenue }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.fee }}
+              </td>
+              <td class="py-[12px] border-[1px] border-l_grey">
+                {{ results.result_employee.time_reply }}
+              </td>
             </tbody>
           </table>
         </div>
       </fieldset>
     </div>
-    <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10">
+    <div class="pb-[50px] grid lg:grid-cols-2 sm:grid-cols-1 gap-10">
       <div class="thong_tin_cong_viec">
-        <fieldset class="border-2 border-l_grey rounded-[18px] shadow-md">
+        <fieldset class="fieldset-nav">
           <legend
-            class="mx-10 px-[20px] py-[6px] font-semibold text-[16px] border"
+            class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
             Thông tin công việc
           </legend>
           <div class="m-10 text-[14px]">
-            <div class="pb-3 grid grid-cols-3 gap-8 items-center">
+            <div class="grid grid-cols-3 gap-8 items-center">
               <p class="col-span-1 font-semibold">Ngày bắt đầu làm việc</p>
-              <div class="col-span-2 bg-l_grey rounded">
-                <p class="px-5 py-2">abc</p>
+              <div class="col-span-2 bg-l_grey rounded flex items-center">
+                <p class="px-5 py-2">{{ view.employees.work_first_date }}</p>
               </div>
             </div>
             <div class="py-3 grid grid-cols-3 gap-8 items-center">
               <p class="col-span-1 font-semibold">Nơi làm việc</p>
               <div class="col-span-2 bg-l_grey rounded">
-                <p class="px-5 py-2">Đường Phúc Diễn, Quận Từ Liêm, Hà Nội</p>
+                <p class="px-5 py-2">{{ addresses.x }}</p>
               </div>
             </div>
             <div class="py-3">
               <p class="col-span-1 font-semibold">Thời gian làm việc</p>
-              <div class="flex">
-                <div class="m-2 flex items-center">
-                  <span class="font-semibold pr-2">1.</span>
-                  <span>Từ</span>
-                  <div
-                    class="mx-2 py-2 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
-                  >
-                    <span>06:00:00</span>
-                    <p><i class="fa-regular fa-clock"></i></p>
+              <div
+                v-for="(timeWork, id) in view.employees.work_time_repeats"
+                v-if="view.employees.work_time_repeats != 0"
+                :key="id"
+              >
+                <div
+                  class="grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-1"
+                >
+                  <div class="m-2 flex items-center">
+                    <span class="font-semibold pr-2">{{ id + 1 }}</span>
+                    <span>Từ</span>
+                    <div
+                      class="mx-2 pt-3 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
+                    >
+                      <span>{{ timeWork.start_time }}</span>
+                      <p><i class="fa-regular fa-clock"></i></p>
+                    </div>
+                  </div>
+                  <div class="m-2 flex items-center">
+                    <span>đến</span>
+                    <div
+                      class="mx-4 pt-3 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
+                    >
+                      <span>{{ timeWork.end_time }}</span>
+                      <p><i class="fa-regular fa-clock"></i></p>
+                    </div>
                   </div>
                 </div>
-                <div class="m-2 flex items-center">
-                  <span>đến</span>
+                <div class="flex">
                   <div
-                    class="mx-4 py-2 px-4 w-[200px] text-l_gray border border-l_gray flex justify-between rounded"
+                    v-for="index in view.time_work"
+                    class="thu_ngay_thang my-3 flex"
                   >
-                    <span>06:00:00</span>
-                    <p><i class="fa-regular fa-clock"></i></p>
+                    <div
+                      class="text-l_gray py-1 px-2 mr-2 bg-white border border-l_gray rounded-full"
+                      :class="{ timeDay: timeWork.repeats.includes(index) }"
+                    >
+                      <span>{{ view.showWorkDay(index) }}</span>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div class="thu_ngay_thang my-3 flex">
-                <div
-                  class="text-white py-1 px-3 mr-2 bg-l_green_light rounded-full"
-                >
-                  <span>Thứ 2</span>
-                </div>
-                <div
-                  class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
-                >
-                  <span>Thứ 3</span>
-                </div>
-                <div
-                  class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
-                >
-                  <span>Thứ 4</span>
-                </div>
-                <div
-                  class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
-                >
-                  <span>Thứ 5</span>
-                </div>
-                <div
-                  class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
-                >
-                  <span>Thứ 6</span>
-                </div>
-                <div
-                  class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
-                >
-                  <span>Thứ 7</span>
-                </div>
-                <div
-                  class="text-l_gray py-1 px-3 mr-2 bg-white border border-l_gray rounded-full"
-                >
-                  <span>Chủ nhật</span>
                 </div>
               </div>
             </div>
             <div class="py-3">
               <p class="col-span-1 font-semibold">Màn hình được sử dụng</p>
               <div>
-                <div class="py-3 flex items-center">
-                  <input
-                    type="checkbox"
-                    value=""
-                    class="w-6 h-6 mr-5 checked:bg-l_green"
-                  />
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.sale"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
                   <span>Chats chốt đơn</span>
                 </div>
-                <div class="py-3 flex items-center">
-                  <input type="checkbox" value="" class="w-6 h-6 mr-5" />
+                <div v-if="view.isPage" class="mx-8">
+                  <div
+                    v-for="item in page.listPage"
+                    class="pb-2 flex items-center relative"
+                  >
+                    <div
+                      class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                    ></div>
+                    <div class="mr-2">
+                      <img
+                        :src="item.avatar"
+                        alt=""
+                        class="w-[30px] h-[30px] rounded-full"
+                      />
+                    </div>
+                    <div>
+                      <p>{{ item.name }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  v-if="view.screen.sale"
+                  class="chats-chot-don-items mx-8 pb-2"
+                >
+                  <div
+                    v-for="item in view.employees.pages.shop_pages"
+                    class="pb-2 flex items-center relative"
+                  >
+                    <div
+                      v-if="item.noti_mode == 1"
+                      class="absolute top-[6px] rounded"
+                    >
+                      <img
+                        src="../assets/l_checked.jpg"
+                        alt=""
+                        style="width: 25px; height: 25px"
+                      />
+                    </div>
+                    <div
+                      class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                    ></div>
+                    <div class="mr-2">
+                      <img
+                        :src="item.avatar"
+                        alt=""
+                        class="w-[30px] h-[30px] rounded-full"
+                      />
+                    </div>
+                    <div>
+                      <p>{{ item.name }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.chat_ops"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
                   <span>Chats vận hành</span>
                 </div>
-                <div class="py-3 flex items-center">
-                  <input
-                    type="checkbox"
-                    value=""
-                    class="w-6 h-6 mr-5 checked:bg-l_green"
-                  />
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.statistic"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
                   <span>Tổng quan (Tổng quan shop)</span>
                 </div>
-                <div class="py-3 flex items-center">
-                  <input type="checkbox" value="" class="w-6 h-6 mr-5" />
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.order"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
                   <span>Đơn hàng (Quản lý và đăng đơn GHTK)</span>
                 </div>
-                <div class="py-3 flex items-center">
-                  <input type="checkbox" value="" class="w-6 h-6 mr-5" />
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.customer"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
                   <span>Khách hàng (Quản lý và chăm sóc GHTK)</span>
                 </div>
-                <div class="py-3 flex items-center">
-                  <input type="checkbox" value="" class="w-6 h-6 mr-5" />
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.products"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
                   <span>Kho và sản phẩm (Quản lý sản phẩm và xuất nhập)</span>
                 </div>
-                <div class="py-3 flex items-center">
-                  <input type="checkbox" value="" class="w-6 h-6 mr-5" />
-                  <span>Nhân vật (Quản lí nhân viên)</span>
+                <div class="py-3 flex items-center relative">
+                  <div
+                    v-if="view.screen.staff"
+                    class="absolute top-[12px] rounded"
+                  >
+                    <img
+                      src="../assets/l_checked.jpg"
+                      alt=""
+                      style="width: 25px; height: 25px"
+                    />
+                  </div>
+                  <div
+                    class="w-[25px] h-[25px] border border-l_green rounded mr-5"
+                  ></div>
+                  <span>Nhân viên (Quản lí nhân viên)</span>
                 </div>
               </div>
             </div>
@@ -350,61 +539,115 @@ export default {
         </fieldset>
       </div>
       <div class="lich_su_hoat_dong">
-        <fieldset class="border-2 border-l_grey rounded-[18px] shadow-md">
+        <fieldset class="fieldset-nav">
           <legend
-            class="mx-10 px-[20px] py-[6px] font-semibold text-[16px] border"
+            class="w-auto mx-10 px-[20px] py-[6px] font-semibold text-[16px] border bg-white"
           >
             Lịch sử hoạt động
           </legend>
-          <div class="mx-10 my-5">
+          <div class="mx-4 mt-5 flex">
             <button
               class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+              :class="{ clickBtn: history.isGreen == 1 }"
+              @click="history.clickToDay(1)"
             >
               Hôm nay
             </button>
             <button
               class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+              :class="{ clickBtn: history.isGreen == 2 }"
+              @click="history.clickToWeek(2)"
             >
               Tuần này
             </button>
             <button
               class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+              :class="{ clickBtn: history.isGreen == 3 }"
+              @click="history.clickToMonth(3)"
             >
               Tháng này
             </button>
             <button
-              class="mr-5 mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
-              @click="clickTuyChon"
+              class="mb-5 px-[20px] py-[4px] text-[16px] rounded-[18px] text-l_green bg-l_grey"
+              :class="{ clickBtn: history.isGreen == 4 }"
+              @click="history.clickToOption()"
             >
               Tùy chọn
             </button>
           </div>
-          <div class="m-10 text-[14px]">
-            <div class="thoi_gian font-semibold">Thời gian</div>
-            <div class="lich_su_hoat_dong">
-              <div class="flex justify-between">
-                <div class="flex">
-                  <p>thời gian</p>
-                  <p>ngày tháng</p>
-                </div>
-                <div>
-                  <p>hành động</p>
+          <div
+            v-if="history.isHCheck"
+            class="scroll-bar mx-4 mb-10 mt-2 text-[14px] overflow-y-auto h-[450px]"
+          >
+            <div
+              v-for="date in history.arrayDate[0]"
+              v-if="history.isHistory == 0"
+              class="thoi_gian"
+            >
+              <p class="px-2 font-semibold text-[16px]">
+                {{ history.countDate(date) }} - {{ history.showDate(date) }}
+              </p>
+              <div
+                v-for="act in history.activity_history"
+                class="lich_su_hoat_dong"
+              >
+                <div
+                  v-if="act.time.slice(0, 10) == date"
+                  class="px-2 flex justify-between items-center"
+                >
+                  <div class="py-2">
+                    <p>{{ act.time.split(" ").reverse().join(" ") }}</p>
+                  </div>
+                  <div>
+                    <p>{{ act.description }}</p>
+                  </div>
                 </div>
               </div>
             </div>
+            <div
+              v-for="date in history.arrayDate[0]"
+              v-if="history.isHistory != 0"
+              class="thoi_gian"
+            >
+              <p class="px-2 font-semibold text-[16px]">
+                {{ history.countDate(date) }} - {{ history.showDate(date) }}
+              </p>
+              <div
+                v-for="act in history.arrayToSearch"
+                class="lich_su_hoat_dong"
+              >
+                <div
+                  v-if="act.time.slice(0, 10) == date"
+                  class="px-2 flex justify-between items-center"
+                >
+                  <div class="py-2">
+                    <p>{{ act.time.split(" ").reverse().join(" ") }}</p>
+                  </div>
+                  <div>
+                    <p>{{ act.description }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="history.isHCheck == false"
+            class="text-center mb-5 mt-2 text-[16px]"
+          >
+            <p>Không có dữ liệu</p>
           </div>
         </fieldset>
       </div>
     </div>
   </div>
-  <div v-if="thongBaoThayDoi" class="thay_doi_thanh_cong">
+  <div v-if="view.thongBaoThayDoi" class="thay_doi_thanh_cong">
     <div
       class="w-1/3 p-2 text-white bg-l_green rounded-full text-center fixed bottom-10 left-1/3"
     >
       <p>Thay đổi trạng thái nhân viên thành công</p>
     </div>
   </div>
-  <div v-if="hienThiTuyChon" class="click_tuy_chon">
+  <div v-if="results.hienThiTuyChon" class="click_tuy_chon_ket_qua">
     <div class="w-screen h-screen bg-black fixed top-0 opacity-70"></div>
     <div class="z-20 fixed top-[100px] left-1/3">
       <div class="py-3 bg-l_green text-center">
@@ -414,6 +657,7 @@ export default {
         <div class="my-5 ml-5 mr-2 text-l_gray">
           <p class="font-semibold pb-1">Chọn ngày bắt đầu:</p>
           <input
+            v-model="results.selectDay"
             type="date"
             placeholder="Nhập ngày bắt đầu"
             class="w-[250px] py-1 pl-2 border border-l_gray rounded"
@@ -422,6 +666,7 @@ export default {
         <div class="my-5 mr-5 ml-2 text-l_gray">
           <p class="font-semibold pb-1">Chọn ngày kết thúc:</p>
           <input
+            v-model="results.selectDay2"
             type="date"
             placeholder="Nhập ngày kết thúc"
             class="w-[250px] py-1 pr-2 border border-l_gray rounded"
@@ -432,7 +677,7 @@ export default {
         <div class="pb-2">
           <button
             class="w-2/3 bg-l_green_light p-2 rounded text-white font-semibold"
-            @click="clickXacNhanTuyChon"
+            @click="results.clickXacNhanTuyChon(4, id)"
           >
             Xác nhận
           </button>
@@ -440,7 +685,7 @@ export default {
         <div class="pb-2">
           <button
             class="w-2/3 bg-l_gray p-2 rounded text-white font-semibold"
-            @click="clickHuyBoTuyChon"
+            @click="results.clickHuyBoTuyChon"
           >
             Hủy bỏ
           </button>
@@ -448,4 +693,106 @@ export default {
       </div>
     </div>
   </div>
+  <div v-if="history.hienThiTuyChon" class="click_tuy_chon_lich_su">
+    <div class="w-screen h-screen bg-black fixed top-0 opacity-70"></div>
+    <div class="z-20 fixed top-[100px] left-1/3">
+      <div class="py-3 bg-l_green text-center">
+        <p class="text-white font-bold text-[18px]">Tùy chọn hiển thị</p>
+      </div>
+      <div class="bg-white flex justify-between">
+        <div class="my-5 ml-5 mr-2 text-l_gray">
+          <p class="font-semibold pb-1">Chọn ngày bắt đầu:</p>
+          <input
+            v-model="history.selectDay"
+            type="date"
+            placeholder="Nhập ngày bắt đầu"
+            class="w-[250px] py-1 pl-2 border border-l_gray rounded"
+          />
+        </div>
+        <div class="my-5 mr-5 ml-2 text-l_gray">
+          <p class="font-semibold pb-1">Chọn ngày kết thúc:</p>
+          <input
+            v-model="history.selectDay2"
+            type="date"
+            placeholder="Nhập ngày kết thúc"
+            class="w-[250px] py-1 pr-2 border border-l_gray rounded"
+          />
+        </div>
+      </div>
+      <div class="py-2 bg-white text-center">
+        <div class="pb-2">
+          <button
+            class="w-2/3 bg-l_green_light p-2 rounded text-white font-semibold"
+            @click="history.clickXacNhanTuyChon(4)"
+          >
+            Xác nhận
+          </button>
+        </div>
+        <div class="pb-2">
+          <button
+            class="w-2/3 bg-l_gray p-2 rounded text-white font-semibold"
+            @click="history.clickHuyBoTuyChon"
+          >
+            Hủy bỏ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-if="results.nhapNgaySai" class="nhap_sai_ngay_ket_qua z-50">
+    <div
+      class="w-1/3 p-2 text-white bg-l_red rounded-full text-center fixed bottom-10 left-1/3"
+    >
+      <p>Ngày bắt đầu không thể lớn hơn ngày kết thúc</p>
+    </div>
+  </div>
+  <div v-if="history.nhapNgaySai" class="nhap_sai_ngay_lich_su z-50">
+    <div
+      class="w-1/3 p-2 text-white bg-l_red rounded-full text-center fixed bottom-10 left-1/3"
+    >
+      <p>Ngày bắt đầu không thể lớn hơn ngày kết thúc</p>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.scroll-bar::-webkit-scrollbar {
+  width: 5px;
+  background-color: white;
+  border-radius: 20px;
+}
+.scroll-bar::-webkit-scrollbar-thumb {
+  width: 5px;
+  height: 30px;
+  background-color: #aaaaaa;
+  border-radius: 20px;
+}
+.scroll-bar-x::-webkit-scrollbar {
+  height: 5px;
+  background-color: white;
+  border-radius: 20px;
+}
+.scroll-bar-x::-webkit-scrollbar-thumb {
+  width: 5px;
+  height: 5px;
+  background-color: #aaaaaa;
+  border-radius: 20px;
+}
+
+.fieldset-nav {
+  padding: 18px 30px 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+  position: relative;
+}
+
+.clickBtn {
+  background-color: #069255 !important;
+  color: white !important;
+}
+.timeDay {
+  background-color: #5eb891 !important;
+  color: white !important;
+}
+</style>

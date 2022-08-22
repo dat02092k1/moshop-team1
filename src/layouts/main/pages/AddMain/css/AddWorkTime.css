@@ -6,14 +6,24 @@
 :deep(.ant-picker) {
     width: 30%;
 }
-/*:deep(.ant-checkbox-inner) {*/
-/*  display: none;*/
-/*}*/
+:deep(.ant-checkbox-inner) {
+  display: none;
+}
 :deep(.ant-checkbox + span) {
     border: 1px solid #069255;
     padding: 2px 8px;
     border-radius: 15px;
 }
+:deep(.ant-checkbox + span):checked{
+    background-color: red;
+}
+:deep(.ant-checkbox-input):hover{
+    color: red;
+    background-color: red;
+}
 .title-time {
     margin: 10px 5px;
+}
+:deep(.ant-checkbox-wrapper + .ant-checkbox-wrapper){
+    background-color: red;
 }

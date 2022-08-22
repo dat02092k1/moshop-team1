@@ -1,52 +1,54 @@
 <template>
   <a-form
-    ref="formRef"
-    :model="formState"
+    ref="refForm"
+    :model="useStore.dataAddMain"
     :rules="rules"
     class="grid md:grid-cols-4 gap-x-5 flex"
   >
     <div class="col-span-2">
       <a-form-item ref="name" label="Tên nhân viên" name="fullname">
-        <a-input v-model:value="formState.fullname" />
+        <a-input v-model:value="useStore.dataAddMain.fullname" />
       </a-form-item>
       <a-form-item ref="phone" label="SĐT" name="tel">
-        <a-input v-model:value="formState.tel" />
+        <a-input v-model:value="useStore.dataAddMain.tel" />
       </a-form-item>
       <a-form-item ref="birthday" label="Ngày sinh" name="birthday">
         <a-date-picker
-          v-model:value="formState.birthday"
-          value-format="HH:mm:ss"
+          v-model:value="useStore.dataAddMain.birthday"
+          value-format="YYYY:MM:DD"
           placeholder="Chọn ngày"
         />
       </a-form-item>
     </div>
     <div class="col-span-2">
-
+      <ChangeStatusStaff v-if="isRouter" />
       <a-form-item ref="password" label="Mật khẩu" name="password">
         <a-input-password
-          v-model:value="formState.password"
+          v-model:value="useStore.dataAddMain.password"
           placeholder="Mật khẩu phải có ít nhất 6 kí tự"
         />
       </a-form-item>
-      <a-form-item ref="address" label="Địa chỉ" name="address">
-        <a-input v-model:value="formState.live_address" allow-clear />
+      <a-form-item ref="live_address" label="Địa chỉ" name="address">
+        <a-input
+          v-model:value="useStore.dataAddMain.live_address"
+          allow-clear
+        />
       </a-form-item>
     </div>
   </a-form>
 </template>
 <script setup>
-import { onBeforeUpdate, ref, toRaw } from "vue";
+import { computed, onBeforeUpdate, ref, toRaw } from "vue";
 import axios from "axios";
 import TOKEN from "../../../../../service/AllApi.js";
-// import {useAddMainStore} from "../../../../../stores/counter.js";
-// const store = useAddMainStore();
-const formRef = ref();
-const formState = ref({
-  fullname: "",
-  tel: "",
-  birthday: "",
-  password: "",
-  live_address: "",
+import ChangeStatusStaff from "../ChangeStatusStaff.vue";
+import { useRouter } from "vue-router";
+import { useAddMainStore } from "../../../../../stores/addMainStore";
+const useStore = useAddMainStore();
+const getCurrentRouter = useRouter().currentRoute.value.name;
+// console.log(getCurrentRouter);
+const isRouter = computed(() => {
+  return getCurrentRouter === "staff.update";
 });
 const rules = {
   fullname: [
@@ -99,12 +101,12 @@ const rules = {
     },
   ],
 };
-
+const refForm = ref();
 const callValidateOnSubmit = () => {
-  formRef.value
+  refForm.value
     .validate()
     .then(() => {
-      console.log(formState.value)
+      console.log(useStore.dataAddMain);
     })
     .catch((error) => {
       console.log("error", error);
@@ -114,22 +116,20 @@ const callValidateOnSubmit = () => {
 //   formRef.value.resetFields();
 // };
 
-const API_ADD_USER = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
-onBeforeUpdate(async () => {
-  try {
-    const res = await axios.post(API_ADD_USER, {
-      headers: {
-        Authorization: "Bearer " + TOKEN.TOKEN,
-      },
-    });
-    console.log(res.data);
-  } catch (error) {
-    console.log(error);
-  }
-});
+// const API_ADD_USER = "https://wh.ghtk.vn/api/v3/page/get-all-page-by-shop-code";
+// onBeforeUpdate(async () => {
+//   try {
+//     const res = await axios.get(API_ADD_USER, {
+//       headers: {
+//         Authorization: "Bearer " + TOKEN.TOKEN,
+//       },
+//     });
+//     console.log(res.data);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 defineExpose({
-  formRef,
-  formState,
   rules,
   callValidateOnSubmit,
 });

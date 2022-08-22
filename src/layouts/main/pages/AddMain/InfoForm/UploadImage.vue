@@ -21,6 +21,8 @@
 </template>
 
 <script setup>
+import {useAddMainStore} from "../../../../../stores/addMainStore.js";
+const useStoreInUpload = useAddMainStore()
 function previewFile() {
   const preview = document.getElementById("imagePreview");
   const file = document.querySelector("input[type=file]").files[0];
@@ -35,9 +37,9 @@ function previewFile() {
   );
 
   if (file) {
-
     reader.readAsDataURL(file);
-    console.log(reader);
+    useStoreInUpload.dataAddMain.avatar = file
+
   }
 }
 </script>
